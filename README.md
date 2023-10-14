@@ -5,15 +5,9 @@
   ~/S/zasya-monitor  vagrant plugin install vagrant-vbguest --plugin-version 0.21
 ```
 
-# How To Create a New VM
+# How To Create a Instance
 
-1. Edit the following locations to customize the installation:
-
-2. 
-
-# How To Write VM to Disk to Run
-
-1. To build a new instance:
+1. Build the VM:
 
 ```
   ~/S/zasya-monitor  vagrant destroy 
@@ -31,7 +25,7 @@ Bringing machine 'zabbix' up with 'virtualbox' provider...
 ==> zabbix: Attempting graceful shutdown of VM...
 ```
 
-2. Now, we need to use VBoxManage to export the VM disks to a raw formatted disk file:
+2. Now, we need to use VBoxManage to export the VM disk to a raw formatted disk file:
 
 ```
 $ ls -lh VirtualBox\ VMs/zasya-monitor_zabbix_1694659244539_38888
@@ -45,7 +39,7 @@ drwx------ 1 jch jch   16 Sep 13 22:40 Logs
 $ VBoxManage clonehd --format RAW VirtualBox\ VMs/zasya-monitor_zabbix_1694659244539_38888/ubuntu-jammy-22.04-cloudimg.vmdk Zasya-Monitor-Customer-release.img
 ```
 
-3. Finally, we will use `dd` to write the image file to an external disk to be provided to the end-user/customer:
+3. Finally, we will use `dd` to write the raw disk image file to an external disk to be provided to the end-user/customer:
 
 ```
 
