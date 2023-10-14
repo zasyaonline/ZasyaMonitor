@@ -154,8 +154,8 @@ sudo rm /usr/share/applications/xfce4-mail-reader.desktop
 sudo cp -a /vagrant/apps/zasya-monitor-config.sh /usr/local/bin/zasya-monitor-config.sh
 
 sudo rm -rf /home/ubuntu
-sudo cp -a /vagrant/ubuntu.zip /home/
-sudo cd /home/; sudo unzip ubuntu.zip
+sudo cp /vagrant/ubuntu.zip /home/
+cd /home/; sudo unzip ubuntu.zip
 sudo chown -R ubuntu:ubuntu /home/ubuntu/
 sudo rm /home/ubuntu.zip
 
