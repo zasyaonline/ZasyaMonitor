@@ -1,8 +1,8 @@
 # Setup
 
 ```
-  ~/S/zasya-monitor  sudo apt-get install virtualbox vagrant virtualbox-guest-x11 virtualbox-guest-utils
-  ~/S/zasya-monitor  vagrant plugin install vagrant-vbguest
+$ sudo apt-get install virtualbox vagrant virtualbox-guest-x11 virtualbox-guest-utils
+$ vagrant plugin install vagrant-vbguest
 ```
 
 # How To Create a Instance
@@ -10,18 +10,18 @@
 1. Build the VM:
 
 ```
-  ~/S/zasya-monitor  vagrant destroy 
+$ vagrant destroy 
     zabbix: Are you sure you want to destroy the 'zabbix' VM? [y/N] y
 ==> zabbix: Forcing shutdown of VM...
 ==> zabbix: Destroying VM and associated drives...
-  ~/S/zasya-monitor  vagrant up 
+$ vagrant up 
 Bringing machine 'zabbix' up with 'virtualbox' provider...
 ==> zabbix: Importing base box 'ubuntu/jammy64'...
 ==> zabbix: Matching MAC address for NAT networking...
 ==> zabbix: Checking if box 'ubuntu/jammy64' version '20230828.0.0' is up to date...
 ==> zabbix: Setting the name of the VM: zasya-monitor_zabbix_1695436074157_71910
 <SNIP>
-  ~/S/zasya-monitor  vagrant halt
+$ vagrant halt
 ==> zabbix: Attempting graceful shutdown of VM...
 ```
 
@@ -42,5 +42,5 @@ $ VBoxManage clonehd --format RAW VirtualBox\ VMs/zasya-monitor_zabbix_169465924
 3. Finally, we will use `dd` to write the raw disk image file to an external disk to be provided to the end-user/customer:
 
 ```
-
+$ dd if=/path/to/file.img of=/dev/sdb
 ```
