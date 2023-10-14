@@ -2,6 +2,7 @@ LINUX_VERSION = "ubuntu/jammy64"
 
 Vagrant.configure("2") do |config|
 
+    config.disksize.size = '10GB'
     config.vm.provider "virtualbox" do |vb|
       # Display the VirtualBox GUI when booting the machine
       vb.gui = true
@@ -18,7 +19,6 @@ Vagrant.configure("2") do |config|
     config.vm.define "zasya" do |zasya|
 
       zasya.vm.box = LINUX_VERSION
-      zasya.disksize.size = '10GB'
       zasya.vm.hostname = "zasya-monitor"
       #zasya.vm.network "forwarded_port", guest: 80 , host: 8080, host_ip: "127.0.0.1"
       #zasya.vm.network "forwarded_port", guest: 5432 , host: 5432, host_ip: "127.0.0.1"
