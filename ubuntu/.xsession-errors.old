@@ -1,0 +1,106 @@
+dbus-update-activation-environment: setting DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1001/bus
+dbus-update-activation-environment: setting DISPLAY=:0
+dbus-update-activation-environment: setting XAUTHORITY=/home/ubuntu/.Xauthority
+/etc/X11/Xsession.d/30x11-common_xresources: line 16: has_option: command not found
+/etc/X11/Xsession.d/75dbus_dbus-launch: line 9: has_option: command not found
+dbus-update-activation-environment: setting QT_ACCESSIBILITY=1
+/etc/X11/Xsession.d/90x11-common_ssh-agent: line 9: has_option: command not found
+dbus-update-activation-environment: setting SHELL=/bin/bash
+dbus-update-activation-environment: setting QT_ACCESSIBILITY=1
+dbus-update-activation-environment: setting XDG_CONFIG_DIRS=/etc/xdg/xdg-xubuntu:/etc/xdg
+dbus-update-activation-environment: setting XDG_SESSION_PATH=/org/freedesktop/DisplayManager/Session0
+dbus-update-activation-environment: setting GTK_IM_MODULE=ibus
+dbus-update-activation-environment: setting CLUTTER_BACKEND=x11
+dbus-update-activation-environment: setting LANGUAGE=en
+dbus-update-activation-environment: setting XMODIFIERS=@im=ibus
+dbus-update-activation-environment: setting DESKTOP_SESSION=xubuntu
+dbus-update-activation-environment: setting PWD=/home/ubuntu
+dbus-update-activation-environment: setting XDG_SESSION_DESKTOP=xubuntu
+dbus-update-activation-environment: setting LOGNAME=ubuntu
+dbus-update-activation-environment: setting QT_QPA_PLATFORMTHEME=gtk2
+dbus-update-activation-environment: setting XDG_SESSION_TYPE=x11
+dbus-update-activation-environment: setting GPG_AGENT_INFO=/run/user/1001/gnupg/S.gpg-agent:0:1
+dbus-update-activation-environment: setting XAUTHORITY=/home/ubuntu/.Xauthority
+dbus-update-activation-environment: setting XDG_GREETER_DATA_DIR=/var/lib/lightdm-data/ubuntu
+dbus-update-activation-environment: setting GDM_LANG=en
+dbus-update-activation-environment: setting HOME=/home/ubuntu
+dbus-update-activation-environment: setting IM_CONFIG_PHASE=1
+dbus-update-activation-environment: setting LANG=C.UTF-8
+dbus-update-activation-environment: setting XDG_CURRENT_DESKTOP=XFCE
+dbus-update-activation-environment: setting XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0
+dbus-update-activation-environment: setting CLUTTER_IM_MODULE=ibus
+dbus-update-activation-environment: setting XDG_SESSION_CLASS=user
+dbus-update-activation-environment: setting GTK_OVERLAY_SCROLLING=0
+dbus-update-activation-environment: setting USER=ubuntu
+dbus-update-activation-environment: setting DISPLAY=:0
+dbus-update-activation-environment: setting SHLVL=1
+dbus-update-activation-environment: setting QT_IM_MODULE=ibus
+dbus-update-activation-environment: setting XDG_RUNTIME_DIR=/run/user/1001
+dbus-update-activation-environment: setting XDG_DATA_DIRS=/usr/share/xfce4:/usr/share/xubuntu:/usr/share/gnome:/usr/local/share:/usr/share:/var/lib/snapd/desktop
+dbus-update-activation-environment: setting PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+dbus-update-activation-environment: setting GDMSESSION=xubuntu
+dbus-update-activation-environment: setting DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1001/bus
+dbus-update-activation-environment: setting _=/usr/bin/dbus-update-activation-environment
+/usr/bin/iceauth:  creating new authority file /run/user/1001/ICEauthority
+
+(xfwm4:2610): xfwm4-WARNING **: 03:41:14.768: Unsupported GL renderer (llvmpipe (LLVM 15.0.7, 256 bits)).
+
+** (wrapper-2.0:2684): WARNING **: 03:41:16.041: No outputs have backlight property
+
+(wrapper-2.0:2680): GLib-GIO-CRITICAL **: 03:41:16.048: g_file_new_for_path: assertion 'path != NULL' failed
+
+(wrapper-2.0:2680): GLib-GIO-CRITICAL **: 03:41:16.048: g_file_monitor_file: assertion 'G_IS_FILE (file)' failed
+
+(wrapper-2.0:2680): GLib-GObject-WARNING **: 03:41:16.048: invalid (NULL) pointer instance
+
+(wrapper-2.0:2680): GLib-GObject-CRITICAL **: 03:41:16.048: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+
+(wrapper-2.0:2680): Gtk-WARNING **: 03:41:16.048: Attempting to add a widget with type GtkToggleButton to a container of type XfcePanelPlugin, but the widget is already inside a container of type XfcePanelPlugin, please remove the widget from its existing container first.
+
+(wrapper-2.0:2677): Gtk-WARNING **: 03:41:16.128: Negative content width -3 (allocation 1, extents 2x2) while allocating gadget (node button, owner GtkToggleButton)
+
+(wrapper-2.0:2680): Gtk-WARNING **: 03:41:16.163: Negative content width -3 (allocation 1, extents 2x2) while allocating gadget (node button, owner GtkToggleButton)
+
+(wrapper-2.0:2685): Gtk-WARNING **: 03:41:16.228: Negative content width -3 (allocation 1, extents 2x2) while allocating gadget (node button, owner PulseaudioButton)
+
+(wrapper-2.0:2684): Gtk-WARNING **: 03:41:16.258: Negative content width -3 (allocation 1, extents 2x2) while allocating gadget (node button, owner PowerManagerButton)
+
+** (xfce4-power-manager:2774): WARNING **: 03:41:16.850: Failed to get name owner: GDBus.Error:org.freedesktop.DBus.Error.NameHasNoOwner: Could not get owner of name 'org.freedesktop.PowerManagement': no such name
+
+
+** (xfce4-power-manager:2774): WARNING **: 03:41:16.859: Failed to get name owner: GDBus.Error:org.freedesktop.DBus.Error.NameHasNoOwner: Could not get owner of name 'org.xfce.PowerManager': no such name
+
+
+(polkit-gnome-authentication-agent-1:2779): GLib-CRITICAL **: 03:41:16.870: g_variant_new_string: assertion 'string != NULL' failed
+
+(polkit-gnome-authentication-agent-1:2779): polkit-gnome-1-WARNING **: 03:41:16.871: Failed to register client: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name org.gnome.SessionManager was not provided by any .service files
+
+(process:2793): ayatana-indicator-application-service-WARNING **: 03:41:16.884: Unable to get watcher name 'org.kde.StatusNotifierWatcher'
+
+(xfce4-power-manager:2774): GLib-GObject-WARNING **: 03:41:16.933: ../../../gobject/gsignal.c:2613: signal 'Changed' is invalid for instance '0x559227428140' of type 'GDBusProxy'
+
+** (xfce4-screensaver:2741): WARNING **: 03:41:16.982: screensaver already running in this session
+
+(xfce4-power-manager:2774): xfce4-power-manager-WARNING **: 03:41:17.267: could not map keysym 1008ffa8 to keycode
+
+
+** (xfce4-power-manager:2774): WARNING **: 03:41:17.294: No outputs have backlight property
+
+(xfce4-power-manager:2774): xfce4-power-manager-WARNING **: 03:41:17.311: Failed to get keyboard max brightness level : GDBus.Error:org.freedesktop.DBus.Error.UnknownMethod: Object does not exist at path “/org/freedesktop/UPower/KbdBacklight”
+blueman-applet 03.41.17 WARNING  PluginManager:147 __load_plugin: Not loading PPPSupport because its conflict has higher priority
+
+** (update-notifier:2782): WARNING **: 03:41:17.854: There is no graphical application installed to manage Livepatch. The livepatch status icon will not be displayed.
+blueman-applet 03.41.17 WARNING  PluginManager:147 __load_plugin: Not loading DhcpClient because its conflict has higher priority
+blueman-applet 03.41.37 WARNING  DiscvManager:119 update_menuitems: warning: Adapter is None
+
+(wrapper-2.0:4282): Gtk-WARNING **: 04:25:34.443: Negative content width -1 (allocation 1, extents 1x1) while allocating gadget (node button, owner XfceArrowButton)
+
+(wrapper-2.0:4289): Gtk-WARNING **: 04:25:35.883: Negative content width -1 (allocation 1, extents 1x1) while allocating gadget (node button, owner XfceArrowButton)
+
+(xfce4-panel:2667): Gtk-CRITICAL **: 04:25:49.972: gtk_widget_destroy: assertion 'GTK_IS_WIDGET (widget)' failed
+
+(xfce4-power-manager:2774): Gtk-WARNING **: 04:26:00.896: A floating object was finalized. This means that someone
+called g_object_unref() on an object that had only a floating
+reference; the initial floating reference is not owned by anyone
+and must be removed with g_object_ref_sink().
+X connection to :0.0 broken (explicit kill or server shutdown).
