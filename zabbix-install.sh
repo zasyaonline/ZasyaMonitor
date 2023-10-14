@@ -152,6 +152,7 @@ sudo cp /vagrant/assets/desktop-background.jpeg /usr/share/xfce4/backdrops/xubun
 
 sudo rm /usr/share/applications/xfce4-mail-reader.desktop 
 sudo cp -a /vagrant/apps/zasya-monitor-config.sh /usr/local/bin/zasya-monitor-config.sh
+sudo chmod 755 /usr/local/bin/zasya-monitor-config.sh
 
 sudo rm -rf /home/ubuntu
 sudo cp /vagrant/ubuntu.zip /home/
