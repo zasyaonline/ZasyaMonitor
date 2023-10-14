@@ -1,8 +1,8 @@
 # Setup
 
 ```
-  ~/S/zasya-monitor  sudo apt-get install virtualbox vagrant 
-  ~/S/zasya-monitor  vagrant plugin install vagrant-vbguest --plugin-version 0.21
+  ~/S/zasya-monitor  sudo apt-get install virtualbox vagrant virtualbox-guest-x11 virtualbox-guest-utils
+  ~/S/zasya-monitor  vagrant plugin install vagrant-vbguest
 ```
 
 # How To Create a Instance
