@@ -175,4 +175,5 @@ sudo VBoxClient --display
 sudo VBoxClient --checkhostversion
 sudo VBoxClient --seamless
 
+sudo rm -rf /var/cache/apt/archives/*.deb
 sudo shutdown -r now
