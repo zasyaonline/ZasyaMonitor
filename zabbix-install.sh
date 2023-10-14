@@ -16,6 +16,7 @@ sudo sed -i "s/1000:,,,/1000:Zasya Admin,,,/g" /etc/passwd
 
 # Remove end-user from sudo group to prevent root access
 sudo deluser ubuntu sudo
+sudo deluser ubuntu admin
 
 echo "######################################################################"
 echo "                        INSTALL ZABBIX                          "
@@ -151,8 +152,6 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get -q -y -f install xubuntu-desktop fir
 sudo cp /vagrant/assets/desktop-background.jpeg /usr/share/xfce4/backdrops/xubuntu-wallpaper.png
 
 sudo rm /usr/share/applications/xfce4-mail-reader.desktop 
-sudo cp -a /vagrant/apps/zasya-monitor-config.sh /usr/local/bin/zasya-monitor-config.sh
-sudo chmod 755 /usr/local/bin/zasya-monitor-config.sh
 
 sudo rm -rf /home/ubuntu
 sudo cp /vagrant/ubuntu.zip /home/
@@ -161,7 +160,8 @@ sudo chown -R ubuntu:ubuntu /home/ubuntu/
 sudo rm /home/ubuntu.zip
 
 sed -i "s/allowed_users=.*$/allowed_users=anybody/" /etc/X11/Xwrapper.config
-sudo cp /vagrant/apps/zasya-monitor-config.sh /usr/local/bin/; sudo chmod 700 /usr/local/bin/zasya-monitor-config.sh
+sudo cp /vagrant/apps/zasya-monitor-config.sh /usr/local/bin/
+sudo chmod 755 /usr/local/bin/zasya-monitor-config.sh
 
 sudo apt-get remove --purge -q -y libreoffice-base-core cheese-common gdm3 cheese thunderbird software-properties-gtk libreoffice-draw gimp hexchat gigolo libreoffice-impress libreoffice-common transmission-gtk rhythmbox xfburn parole gnome-mines gnome-sudoku
 sudo apt-get autoremove --purge -q -y

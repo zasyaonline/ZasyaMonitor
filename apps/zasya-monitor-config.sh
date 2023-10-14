@@ -8,7 +8,7 @@ echo -n "New account password: "
 read -r accountPass
 echo -n "Subnet for autodiscovery? (192.168.0.0/24): "
 read -r subNet
-
+echo
 
 if [ -n "$accountName" ]; then
   if [ -n "$accountPass" ]; then
@@ -25,4 +25,7 @@ else
     echo "Invalud username, password or subnet! Exiting."
 fi
 
+echo
+echo -n "Press any key to exit..."
+read -r exit
 
