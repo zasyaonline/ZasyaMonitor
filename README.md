@@ -2,7 +2,7 @@
 
 ```
 $ sudo apt-get install virtualbox vagrant virtualbox-guest-x11 virtualbox-guest-utils
-$ vagrant plugin install vagrant-vbguest
+$ vagrant plugin install vagrant-vbguest vagrant-disksize
 ```
 
 # How To Create a Instance
