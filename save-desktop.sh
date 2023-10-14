@@ -5,3 +5,5 @@
 # versions.
 
 vagrant ssh -- -t 'sudo rm -rf /vagrant/ubuntu; sudo cp -a /home/ubuntu /vagrant/'
+zip -r ubuntu.zip ubuntu/
+rm -rf ubuntu/
