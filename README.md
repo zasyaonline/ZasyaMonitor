@@ -31,41 +31,6 @@ Bringing machine 'zabbix' up with 'virtualbox' provider...
 ==> zabbix: Attempting graceful shutdown of VM...
 ```
 
-```
-  ~/S/zasya-monitor  vagrant ssh
-Welcome to Ubuntu 22.04.3 LTS (GNU/Linux 5.15.0-82-generic x86_64)
-
- * Documentation:  https://help.ubuntu.com
- * Management:     https://landscape.canonical.com
- * Support:        https://ubuntu.com/advantage
-
-  System information as of Sat Sep 23 03:13:12 UTC 2023
-
-  System load:  0.0732421875       Processes:               232
-  Usage of /:   15.1% of 38.70GB   Users logged in:         0
-  Memory usage: 50%                IPv4 address for enp0s3: 10.0.2.15
-  Swap usage:   0%
-
- * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
-   just raised the bar for easy, resilient and secure K8s cluster deployment.
-
-   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
-
-Expanded Security Maintenance for Applications is not enabled.
-
-31 updates can be applied immediately.
-16 of these updates are standard security updates.
-To see these additional updates run: apt list --upgradable
-
-Enable ESM Apps to receive additional future security updates.
-See https://ubuntu.com/esm or run: sudo pro status
-
-
-*** System restart required ***
-vagrant@zabbix:~$
-```
-
-
 2. Now, we need to use VBoxManage to export the VM disks to a raw formatted disk file:
 
 ```
