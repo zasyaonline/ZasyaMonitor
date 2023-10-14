@@ -69,12 +69,6 @@ vagrant@zabbix:~$
 2. Now, we need to use VBoxManage to export the VM disks to a raw formatted disk file:
 
 ```
-
-```
-
-3. Finally, we will use `dd` to write the image file to an external disk to be provided to the end-user/customer:
-
-```
 $ ls -lh VirtualBox\ VMs/zasya-monitor_zabbix_1694659244539_38888
 total 5.5G
 drwx------ 1 jch jch   16 Sep 13 22:40 Logs
@@ -84,4 +78,10 @@ drwx------ 1 jch jch   16 Sep 13 22:40 Logs
 -rw------- 1 jch jch 4.4K Sep 13 22:41 zasya-monitor_zabbix_1694659244539_38888.vbox-prev
 
 $ VBoxManage clonehd --format RAW VirtualBox\ VMs/zasya-monitor_zabbix_1694659244539_38888/ubuntu-jammy-22.04-cloudimg.vmdk Zasya-Monitor-Customer-release.img
+```
+
+3. Finally, we will use `dd` to write the image file to an external disk to be provided to the end-user/customer:
+
+```
+
 ```
