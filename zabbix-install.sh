@@ -11,13 +11,6 @@ echo 'vagrant:ADMINPASSWORD' | sudo chpasswd
 
 PGPASSWORD=${1:-ADMINPASSWORD}
 
-sudo sed -i "s/Ubuntu/Zasya/g" /etc/passwd
-sudo sed -i "s/1000:,,,/1000:Zasya Admin,,,/g" /etc/passwd
-
-# Remove end-user from sudo group to prevent root access
-sudo deluser ubuntu sudo
-sudo deluser ubuntu admin
-
 echo "######################################################################"
 echo "                        INSTALL ZABBIX                          "
 echo "######################################################################"
@@ -26,7 +19,7 @@ echo "########################################################"
 echo "Install dependencies"
 echo "########################################################"
 sudo apt-get -q -y update; sudo apt-get -q -y dist-upgrade
-sudo apt-get -q -y install gnupg2 
+sudo apt-get -q -y install gnupg2 python3-pip
 
 sudo echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
@@ -169,6 +162,8 @@ sudo apt-get autoremove --purge -q -y
 ZABBIX_ADMIN_PASS=`htpasswd -bnBC 10 "" ${PGPASSWORD} | tr -d ":\n"`
 psql postgresql://zabbix:${PGPASSWORD}@localhost --command="update users set passwd = '${ZABBIX_ADMIN_PASS}' where username = 'Admin';" 
 
+sudo pip install git+https://github.com/unioslo/zabbix-cli.git@master
+
 sudo VBoxClient --clipboard
 sudo VBoxClient --draganddrop
 sudo VBoxClient --display
@@ -176,4 +171,13 @@ sudo VBoxClient --checkhostversion
 sudo VBoxClient --seamless
 
 sudo rm -rf /var/cache/apt/archives/*.deb
+
+sudo sed -i "s/Ubuntu/Zasya/g" /etc/passwd
+sudo sed -i "s/1000:,,,/1000:Zasya Admin,,,/g" /etc/passwd
+
+# Remove end-user from sudo group to prevent root access
+sudo deluser ubuntu sudo
+sudo deluser ubuntu adm
+sudo deluser ubuntu admin
+
 sudo shutdown -r now

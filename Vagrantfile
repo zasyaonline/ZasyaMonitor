@@ -1,8 +1,7 @@
-LINUX_VERSION = "ubuntu/jammy64"
+LINUX_VERSION = "boxen/ubuntu-22.04-x86_64"
 
 Vagrant.configure("2") do |config|
 
-    config.disksize.size = '10GB'
     config.vm.provider "virtualbox" do |vb|
       # Display the VirtualBox GUI when booting the machine
       vb.gui = true
