@@ -1,15 +1,8 @@
 #!/bin/bash
 
-# XXX: Zasya / ubuntu password
-echo 'ubuntu:USERPASSWORD' | sudo chpasswd
-
-# XXX: Zasya Admin / vagrant password
-echo 'vagrant:ADMINPASSWORD' | sudo chpasswd
-
-# XXX: User Zabbix username and password monadmin
-# ...
-
-PGPASSWORD=${1:-ADMINPASSWORD}
+USERPASSWORD=${1:-USERPASSWORD}
+ADMINPASSWORD=${1:-ADMINPASSWORD}
+PGPASSWORD=${1:-PGPASSWORD}
 
 echo "######################################################################"
 echo "                        INSTALL ZABBIX                          "
@@ -54,6 +47,7 @@ sudo sed -i "s/# DBPassword=/DBPassword=${PGPASSWORD}/" /etc/zabbix/zabbix_serve
 sudo systemctl enable --now zabbix-server
 
 sudo apt-get -q -y install zabbix-frontend-php php8.1-pgsql zabbix-nginx-conf
+sudo apt-get clean
 
 echo "php_value[date.timezone] = America/Chicago" >> /etc/php/8.1/fpm/pool.d/zabbix-php-fpm.conf
 
@@ -115,6 +109,7 @@ wget --quiet -O - https://packagecloud.io/timescale/timescaledb/gpgkey | sudo gp
 
 sudo apt-get -q update
 sudo apt-get -q install -y timescaledb-2-postgresql-15=2.10.1~ubuntu22.04
+sudo apt-get clean
 
 sudo systemctl stop zabbix-server
 sudo systemctl stop postgresql
@@ -139,8 +134,19 @@ sudo cp /vagrant/assets/company-main-logo.png /usr/share/zabbix/company-main-log
 sudo cp /vagrant/assets/company-main-logo-sidebar.png /usr/share/zabbix/company-main-logo-sidebar.png
 sudo cp /vagrant/assets/company-main-logo-sidebar-compact.png /usr/share/zabbix/company-main-logo-sidebar-compact.png
 
+sudo rm -rf /var/cache/apt/archives/*.deb
 sudo DEBIAN_FRONTEND=noninteractive apt-get -q -y -f install virtualbox-guest-utils virtualbox-guest-x11 virtualbox-guest-x11 apache2-utils 
-sudo DEBIAN_FRONTEND=noninteractive apt-get -q -y -f install xubuntu-desktop firefox
+
+sudo usermod -c "Zasya Admin" vagrant
+echo "vagrant:${ADMINPASSWORD}" | sudo chpasswd
+sudo useradd -m -c "Zasya" -s /bin/bash ubuntu
+echo "ubuntu:${USERPASSWORD}" | sudo chpasswd
+
+sudo apt-get clean
+sudo DEBIAN_FRONTEND=noninteractive apt-get -q -y -f install xubuntu-core 
+sudo DEBIAN_FRONTEND=noninteractive apt-get -q -y -f remove --purge gdm3
+sudo DEBIAN_FRONTEND=noninteractive apt-get -q -y -f install lightdm
+sudo apt-get clean
 
 sudo cp /vagrant/assets/desktop-background.jpeg /usr/share/xfce4/backdrops/xubuntu-wallpaper.png
 
@@ -156,7 +162,7 @@ sed -i "s/allowed_users=.*$/allowed_users=anybody/" /etc/X11/Xwrapper.config
 sudo cp /vagrant/apps/zasya-monitor-config.sh /usr/local/bin/
 sudo chmod 755 /usr/local/bin/zasya-monitor-config.sh
 
-sudo apt-get remove --purge -q -y libreoffice-base-core cheese-common gdm3 cheese thunderbird software-properties-gtk libreoffice-draw gimp hexchat gigolo libreoffice-impress libreoffice-common transmission-gtk rhythmbox xfburn parole gnome-mines gnome-sudoku
+sudo apt-get remove --purge -q -y libreoffice-base-core cheese-common gdm3 cheese thunderbird software-properties-gtk libreoffice-draw gimp hexchat gigolo libreoffice-impress libreoffice-common transmission-gtk rhythmbox xfburn parole gnome-mines gnome-sudoku snap snapd
 sudo apt-get autoremove --purge -q -y
 
 ZABBIX_ADMIN_PASS=`htpasswd -bnBC 10 "" ${PGPASSWORD} | tr -d ":\n"`
@@ -169,15 +175,5 @@ sudo VBoxClient --draganddrop
 sudo VBoxClient --display
 sudo VBoxClient --checkhostversion
 sudo VBoxClient --seamless
-
-sudo rm -rf /var/cache/apt/archives/*.deb
-
-sudo sed -i "s/Ubuntu/Zasya/g" /etc/passwd
-sudo sed -i "s/1000:,,,/1000:Zasya Admin,,,/g" /etc/passwd
-
-# Remove end-user from sudo group to prevent root access
-sudo deluser ubuntu sudo
-sudo deluser ubuntu adm
-sudo deluser ubuntu admin
 
 sudo shutdown -r now

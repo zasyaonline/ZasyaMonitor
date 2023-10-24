@@ -1,6 +1,14 @@
 LINUX_VERSION = "boxen/ubuntu-22.04-x86_64"
 
+$default_network_interface = `ip route | awk '/^default/ {printf "%s", $5; exit 0}'`
+
+
 Vagrant.configure("2") do |config|
+
+    #config.vm.network "public_network", bridge: "#$default_network_interface"
+    #config.vm.network "private_network", ip: "192.168.56.56"
+
+    config.vm.synced_folder ".", "/vagrant"
 
     config.vm.provider "virtualbox" do |vb|
       # Display the VirtualBox GUI when booting the machine
