@@ -5,5 +5,5 @@
 # versions.
 
 vagrant ssh -- -t 'sudo cp -a /home/ubuntu /tmp/'
-vagrant ssh -- -t 'zip -r /tmp/ubuntu.zip /tmp/ubuntu/'
+vagrant ssh -- -t 'cd /tmp; zip -r ubuntu.zip ubuntu/'
 vagrant scp :/tmp/ubuntu.zip ubuntu.zip
