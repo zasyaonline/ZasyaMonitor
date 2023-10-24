@@ -145,7 +145,7 @@ echo "ubuntu:${USERPASSWORD}" | sudo chpasswd
 sudo apt-get clean
 sudo DEBIAN_FRONTEND=noninteractive apt-get -q -y -f install xubuntu-core 
 sudo DEBIAN_FRONTEND=noninteractive apt-get -q -y -f remove --purge gdm3
-sudo DEBIAN_FRONTEND=noninteractive apt-get -q -y -f install lightdm
+sudo DEBIAN_FRONTEND=noninteractive apt-get -q -y -f install lightdm firefox
 sudo apt-get clean
 
 sudo cp /vagrant/assets/desktop-background.jpeg /usr/share/xfce4/backdrops/xubuntu-wallpaper.png

@@ -5,7 +5,8 @@ $default_network_interface = `ip route | awk '/^default/ {printf "%s", $5; exit 
 
 Vagrant.configure("2") do |config|
 
-    #config.vm.network "public_network", bridge: "#$default_network_interface"
+    config.vm.network "public_network", bridge: "#$default_network_interface"
+
     #config.vm.network "private_network", ip: "192.168.56.56"
 
     config.vm.synced_folder ".", "/vagrant"
