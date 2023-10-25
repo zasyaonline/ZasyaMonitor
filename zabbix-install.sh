@@ -147,8 +147,7 @@ echo "ubuntu:${USERPASSWORD}" | sudo chpasswd
 sudo apt-get clean
 sudo DEBIAN_FRONTEND=noninteractive apt-get -q -y -f install xubuntu-core 
 sudo DEBIAN_FRONTEND=noninteractive apt-get -q -y -f remove --purge gdm3
-sudo DEBIAN_FRONTEND=noninteractive apt-get -q -y -f install lightdm firefox
-sudo snap install firefox
+sudo DEBIAN_FRONTEND=noninteractive apt-get -q -y -f install lightdm 
 sudo apt-get clean
 
 sudo cp /vagrant/assets/desktop-background.jpeg /usr/share/xfce4/backdrops/xubuntu-wallpaper.png
@@ -165,11 +164,28 @@ sed -i "s/allowed_users=.*$/allowed_users=anybody/" /etc/X11/Xwrapper.config
 sudo cp /vagrant/apps/zasya-monitor-config.sh /usr/local/bin/
 sudo chmod 755 /usr/local/bin/zasya-monitor-config.sh
 
-sudo apt-get remove --purge -q -y libreoffice-base-core cheese-common gdm3 cheese thunderbird software-properties-gtk libreoffice-draw gimp hexchat gigolo libreoffice-impress libreoffice-common transmission-gtk rhythmbox xfburn parole gnome-mines gnome-sudoku
+sudo apt-get remove --purge -q -y libreoffice-base-core cheese-common gdm3 cheese thunderbird software-properties-gtk libreoffice-draw gimp hexchat gigolo libreoffice-impress libreoffice-common transmission-gtk rhythmbox xfburn parole gnome-mines gnome-sudoku snapd
 sudo apt-get autoremove --purge -q -y
 
-ZABBIX_ADMIN_PASS=`htpasswd -bnBC 10 "" ${PGPASSWORD} | tr -d ":\n"`
-psql postgresql://zabbix:${PGPASSWORD}@localhost --command="update users set passwd = '${ZABBIX_ADMIN_PASS}' where username = 'Admin';" 
+# Install non-Snap version of Firefox
+# https://askubuntu.com/questions/1399383/how-to-install-firefox-as-a-traditional-deb-package-without-snap-in-ubuntu-22
+sudo add-apt-repository -y ppa:mozillateam/ppa
+sudo apt-get update
+
+echo '
+Package: *
+Pin: release o=LP-PPA-mozillateam
+Pin-Priority: 1001
+
+Package: firefox
+Pin: version 1:1snap1-0ubuntu2
+Pin-Priority: -1
+' | sudo tee /etc/apt/preferences.d/mozilla-firefox
+
+sudo apt install -q -y firefox
+
+ZABBIX_ADMIN_PASSHASH=`htpasswd -bnBC 10 "" ${ZABBIX_ADMIN_PASS} | tr -d ":\n"`
+psql postgresql://zabbix:${PGPASSWORD}@localhost --command="update users set passwd = '${ZABBIX_ADMIN_PASSHASH}' where username = 'Admin';" 
 
 sudo pip install git+https://github.com/unioslo/zabbix-cli.git@master
 
