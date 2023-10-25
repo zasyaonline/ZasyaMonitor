@@ -2,6 +2,8 @@
 
 USERPASSWORD=${1:-USERPASSWORD}
 ADMINPASSWORD=${1:-ADMINPASSWORD}
+ZABBIX_ADMIN_PASS=${1:-ZABBIX_ADMIN_PASS}
+
 PGPASSWORD=${1:-PGPASSWORD}
 
 echo "######################################################################"
