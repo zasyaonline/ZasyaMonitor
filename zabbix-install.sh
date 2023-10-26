@@ -202,7 +202,7 @@ sudo find /usr/share/zabbix/ -type f -exec sed -i 's/Zabbix/Zasya/g' {} \;
 sudo mv /usr/share/zabbix/include/classes/server/CZabbixServer.php /usr/share/zabbix/include/classes/server/CZasyaServer.php
 sudo mv /usr/share/zabbix/include/classes/api/item_types/CItemTypeZabbix.php /usr/share/zabbix/include/classes/api/item_types/CItemTypeZasya.php
 sudo mv /usr/share/zabbix/include/classes/api/item_types/CItemTypeZabbixActive.php /usr/share/zabbix/include/classes/api/item_types/CItemTypeZasyaActive.php
-sudo mv /usr/share/zabbix/conf/zabbix.php /usr/share/zabbix/conf/zasya.php
+sudo mv /usr/share/zabbix/zabbix.php /usr/share/zabbix/zasya.php
 sudo mv /usr/share/zabbix/conf/zabbix.conf.php /usr/share/zabbix/conf/zasya.conf.php
 #sudo find /usr/share/zabbix/conf/zasya.conf.php -type f -exec sed -i 's/Zabbix/Zasya/g' {} \;
 
