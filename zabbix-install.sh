@@ -28,8 +28,8 @@ sudo sed -i "s/ident/md5/g" /etc/postgresql/15/main/pg_hba.conf
 sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /etc/postgresql/15/main/postgresql.conf
 sudo systemctl restart postgresql@15-main
 
-sudo -u postgres psql -c "CREATE USER zabbix WITH ENCRYPTED PASSWORD '${PGPASSWORD}'" 2>/dev/null
-sudo -u postgres createdb -O zabbix -E Unicode -T template0 zabbix 2>/dev/null
+sudo -u postgres psql -c "CREATE USER zasya WITH ENCRYPTED PASSWORD '${PGPASSWORD}'" 2>/dev/null
+sudo -u postgres createdb -O zasya -E Unicode -T template0 zasya 2>/dev/null
 
 echo "########################################################"
 echo "ZABBIX SERVER"
@@ -41,7 +41,7 @@ sudo dpkg -i zabbix-release_6.4-1+ubuntu22.04_all.deb
 sudo apt-get -q update
 sudo apt-get -q -y install zabbix-server-pgsql zabbix-sql-scripts
 
-zcat /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz | sudo -u zabbix psql zabbix
+zcat /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz | sudo -u zasya psql zasya
 
 sudo sed -i "s/# DBHost=localhost/DBHost=localhost/" /etc/zabbix/zabbix_server.conf
 sudo sed -i "s/# DBPassword=/DBPassword=${PGPASSWORD}/" /etc/zabbix/zabbix_server.conf
@@ -58,8 +58,8 @@ sudo tee /etc/zabbix/web/zabbix.conf.php <<EOL
     \$DB["TYPE"] = "POSTGRESQL";
     \$DB["SERVER"] = "localhost";
     \$DB["PORT"] = "5432";
-    \$DB["DATABASE"] = "zabbix";
-    \$DB["USER"] = "zabbix";
+    \$DB["DATABASE"] = "zasya";
+    \$DB["USER"] = "zasya";
     \$DB["PASSWORD"] = "${PGPASSWORD}";
     \$DB["SCHEMA"] = "";
     \$DB["ENCRYPTION"] = false;
@@ -74,7 +74,7 @@ sudo tee /etc/zabbix/web/zabbix.conf.php <<EOL
     \$DB["DOUBLE_IEEE754"] = true;
     \$ZBX_SERVER = "localhost";
     \$ZBX_SERVER_PORT = "10051";
-    \$ZBX_SERVER_NAME = "zabbix";
+    \$ZBX_SERVER_NAME = "Zasya Monitor";
     \$IMAGE_FORMAT_DEFAULT = IMAGE_FORMAT_PNG;
 EOL
 
@@ -121,9 +121,9 @@ sudo mv /root/postgresql.conf /etc/postgresql/15/main/postgresql.conf
 
 sudo systemctl start postgresql
 sudo -u postgres timescaledb-tune --quiet --yes
-echo "CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;" | sudo -u postgres psql zabbix 2>/dev/null
+echo "CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;" | sudo -u postgres psql zasya 2>/dev/null
 
-cat /usr/share/zabbix-sql-scripts/postgresql/timescaledb.sql | sudo -u zabbix psql zabbix
+cat /usr/share/zabbix-sql-scripts/postgresql/timescaledb.sql | sudo -u zasya psql zasya
 
 sudo systemctl start zabbix-server
 sleep 5
@@ -151,8 +151,6 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get -q -y -f install lightdm
 sudo apt-get clean
 
 sudo cp /vagrant/assets/desktop-background.jpeg /usr/share/xfce4/backdrops/xubuntu-wallpaper.png
-
-sudo rm /usr/share/applications/xfce4-mail-reader.desktop 
 
 sudo rm -rf /home/ubuntu
 sudo cp /vagrant/ubuntu.zip /home/
@@ -185,14 +183,27 @@ Pin-Priority: -1
 sudo apt install -q -y firefox
 
 ZABBIX_ADMIN_PASSHASH=`htpasswd -bnBC 10 "" ${ZABBIX_ADMIN_PASS} | tr -d ":\n"`
-psql postgresql://zabbix:${PGPASSWORD}@localhost --command="update users set passwd = '${ZABBIX_ADMIN_PASSHASH}' where username = 'Admin';" 
+psql postgresql://zasya:${PGPASSWORD}@localhost --command="update users set passwd = '${ZABBIX_ADMIN_PASSHASH}' where username = 'Admin';" 
 
 sudo pip install git+https://github.com/unioslo/zabbix-cli.git@master
+# Hack to fix Zabbix 6.4 support for zabbix-cli
+# https://github.com/unioslo/zabbix-cli/issues/160
+sudo sed -i "s/user=user/username=user/g" /usr/local/lib/python3.10/dist-packages/zabbix_cli/pyzabbix.py
 
 sudo VBoxClient --clipboard
 sudo VBoxClient --draganddrop
 sudo VBoxClient --display
 sudo VBoxClient --checkhostversion
 sudo VBoxClient --seamless
+
+# Finish rebranding Zabbix to Zasya
+sudo find /usr/share/zabbix/ -type f -exec sed -i 's/zabbix/zasya/g' {} \;
+sudo find /usr/share/zabbix/ -type f -exec sed -i 's/Zabbix/Zasya/g' {} \;
+sudo mv /usr/share/zabbix/include/classes/server/CZabbixServer.php ./include/classes/server/CZasyaServer.php
+sudo mv /usr/share/zabbix/include/classes/api/item_types/CItemTypeZabbix.php ./include/classes/api/item_types/CItemTypeZasya.php
+sudo mv /usr/share/zabbix/include/classes/api/item_types/CItemTypeZabbixActive.php ./include/classes/api/item_types/CItemTypeZasyaActive.php
+sudo mv /usr/share/zabbix/conf/zabbix.php /usr/share/zabbix/conf/zasya.php
+sudo mv /usr/share/zabbix/conf/zabbix.conf.php /usr/share/zabbix/conf/zasya.conf.php
+#sudo find /usr/share/zabbix/conf/zasya.conf.php -type f -exec sed -i 's/Zabbix/Zasya/g' {} \;
 
 sudo shutdown -r now
