@@ -28,8 +28,8 @@ sudo sed -i "s/ident/md5/g" /etc/postgresql/15/main/pg_hba.conf
 sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /etc/postgresql/15/main/postgresql.conf
 sudo systemctl restart postgresql@15-main
 
-sudo -u postgres psql -c "CREATE USER zasya WITH ENCRYPTED PASSWORD '${PGPASSWORD}'" 2>/dev/null
-sudo -u postgres createdb -O zasya -E Unicode -T template0 zasya 2>/dev/null
+sudo -u postgres psql -c "CREATE USER zabbix WITH ENCRYPTED PASSWORD '${PGPASSWORD}'" 2>/dev/null
+sudo -u postgres createdb -O zabbix -E Unicode -T template0 zabbix 2>/dev/null
 
 echo "########################################################"
 echo "ZABBIX SERVER"
@@ -41,7 +41,7 @@ sudo dpkg -i zabbix-release_6.4-1+ubuntu22.04_all.deb
 sudo apt-get -q update
 sudo apt-get -q -y install zabbix-server-pgsql zabbix-sql-scripts
 
-zcat /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz | sudo -u zasya psql zasya
+zcat /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz | sudo -u zabbix psql zabbix
 
 sudo sed -i "s/# DBHost=localhost/DBHost=localhost/" /etc/zabbix/zabbix_server.conf
 sudo sed -i "s/# DBPassword=/DBPassword=${PGPASSWORD}/" /etc/zabbix/zabbix_server.conf
@@ -51,15 +51,15 @@ sudo systemctl enable --now zabbix-server
 sudo apt-get -q -y install zabbix-frontend-php php8.1-pgsql zabbix-nginx-conf
 sudo apt-get clean
 
-echo "php_value[date.timezone] = America/Chicago" >> /etc/php/8.1/fpm/pool.d/zabbix-php-fpm.conf
+echo "php_value[date.timezone] = " >> /etc/php/8.1/fpm/pool.d/zabbix-php-fpm.conf
 
 sudo tee /etc/zabbix/web/zabbix.conf.php <<EOL
 <?php
     \$DB["TYPE"] = "POSTGRESQL";
     \$DB["SERVER"] = "localhost";
     \$DB["PORT"] = "5432";
-    \$DB["DATABASE"] = "zasya";
-    \$DB["USER"] = "zasya";
+    \$DB["DATABASE"] = "zabbix";
+    \$DB["USER"] = "zabbix";
     \$DB["PASSWORD"] = "${PGPASSWORD}";
     \$DB["SCHEMA"] = "";
     \$DB["ENCRYPTION"] = false;
@@ -121,9 +121,9 @@ sudo mv /root/postgresql.conf /etc/postgresql/15/main/postgresql.conf
 
 sudo systemctl start postgresql
 sudo -u postgres timescaledb-tune --quiet --yes
-echo "CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;" | sudo -u postgres psql zasya 2>/dev/null
+echo "CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;" | sudo -u postgres psql zabbix 2>/dev/null
 
-cat /usr/share/zabbix-sql-scripts/postgresql/timescaledb.sql | sudo -u zasya psql zasya
+cat /usr/share/zabbix-sql-scripts/postgresql/timescaledb.sql | sudo -u zabbix psql zabbix
 
 sudo systemctl start zabbix-server
 sleep 5
@@ -183,7 +183,7 @@ Pin-Priority: -1
 sudo apt install -q -y firefox
 
 ZABBIX_ADMIN_PASSHASH=`htpasswd -bnBC 10 "" ${ZABBIX_ADMIN_PASS} | tr -d ":\n"`
-psql postgresql://zasya:${PGPASSWORD}@localhost --command="update users set passwd = '${ZABBIX_ADMIN_PASSHASH}' where username = 'Admin';" 
+psql postgresql://zabbix:${PGPASSWORD}@localhost --command="update users set passwd = '${ZABBIX_ADMIN_PASSHASH}' where username = 'Admin';" 
 
 sudo pip install git+https://github.com/unioslo/zabbix-cli.git@master
 # Hack to fix Zabbix 6.4 support for zabbix-cli
@@ -197,8 +197,8 @@ sudo VBoxClient --checkhostversion
 sudo VBoxClient --seamless
 
 # Finish rebranding Zabbix to Zasya
-sudo find /usr/share/zabbix/ -type f -exec sed -i 's/zabbix/zasya/g' {} \;
-sudo find /usr/share/zabbix/ -type f -exec sed -i 's/Zabbix/Zasya/g' {} \;
+sudo find /usr/share/zabbix/ -type f -not -path './conf/*' -exec sed -i 's/zabbix/zasya/g' {} \;
+sudo find /usr/share/zabbix/ -type f -not -path './conf/*' -exec sed -i 's/Zabbix/Zasya/g' {} \;
 sudo mv /usr/share/zabbix/include/classes/server/CZabbixServer.php /usr/share/zabbix/include/classes/server/CZasyaServer.php
 sudo mv /usr/share/zabbix/include/classes/api/item_types/CItemTypeZabbix.php /usr/share/zabbix/include/classes/api/item_types/CItemTypeZasya.php
 sudo mv /usr/share/zabbix/include/classes/api/item_types/CItemTypeZabbixActive.php /usr/share/zabbix/include/classes/api/item_types/CItemTypeZasyaActive.php
