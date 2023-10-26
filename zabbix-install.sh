@@ -184,7 +184,7 @@ sudo apt install -q -y firefox
 
 ZABBIX_ADMIN_PASSHASH=`htpasswd -bnBC 10 "" ${ZABBIX_ADMIN_PASS} | tr -d ":\n"`
 psql postgresql://zabbix:${PGPASSWORD}@localhost --command="update users set passwd = '${ZABBIX_ADMIN_PASSHASH}' where username = 'Admin';" 
-
+psql postgresql://zabbix:${PGPASSWORD}@localhost --command="update hosts set name = 'Zasya server' where hostid = '10084';"
 sudo pip install git+https://github.com/unioslo/zabbix-cli.git@master
 # Hack to fix Zabbix 6.4 support for zabbix-cli
 # https://github.com/unioslo/zabbix-cli/issues/160
