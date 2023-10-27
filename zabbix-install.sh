@@ -206,6 +206,9 @@ sudo mv /usr/share/zabbix/zabbix.php /usr/share/zabbix/zasya.php
 sudo mv /usr/share/zabbix/conf/zabbix.conf.php /usr/share/zabbix/conf/zasya.conf.php
 #sudo find /usr/share/zabbix/conf/zasya.conf.php -type f -exec sed -i 's/Zabbix/Zasya/g' {} \;
 
+# Clear up >500MB by uninstalling old kernel that came with the OS:
+sudo apt-get remove --purge linux-image-5.15.0-78-generic linux-headers-5.15.0-78 linux-headers-5.15.0-78-generic linux-modules-5.15.0-78-generic
+
 # If a zabbix.sql exists in this folder let's drop the old zabbix database and import it.
 sudo cp /vagrant/zabbix.sql /tmp/
 sudo cp /vagrant/zabbix.sql /tmp/
