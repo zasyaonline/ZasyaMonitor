@@ -206,4 +206,8 @@ sudo mv /usr/share/zabbix/zabbix.php /usr/share/zabbix/zasya.php
 sudo mv /usr/share/zabbix/conf/zabbix.conf.php /usr/share/zabbix/conf/zasya.conf.php
 #sudo find /usr/share/zabbix/conf/zasya.conf.php -type f -exec sed -i 's/Zabbix/Zasya/g' {} \;
 
+# If a zabbix.sql exists in this folder let's drop the old zabbix database and import it.
+test -f zabbix.sql && sudo su - postgres -c 'pg_dump zabbix'
+test -f zabbix.sql && sudo su - postgres -c 'pg_restore -f /vagrant/zabbix.sql'
+
 sudo shutdown -r now
