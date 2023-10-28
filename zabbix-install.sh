@@ -151,6 +151,7 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get -q -y -f install lightdm
 sudo apt-get clean
 
 sudo cp /vagrant/assets/desktop-background.jpeg /usr/share/xfce4/backdrops/xubuntu-wallpaper.png
+sudo cp /vagrant/assets/favicon.ico /usr/share/zabbix/favicon.ico
 
 sudo rm -rf /home/ubuntu
 sudo cp /vagrant/ubuntu.zip /home/
