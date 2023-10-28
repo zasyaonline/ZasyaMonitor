@@ -131,6 +131,9 @@ sudo systemctl restart php8.1-fpm
 sleep 5
 sudo systemctl restart nginx
 
+sudo cp -a /vagrant/agents /usr/share/zabbix/
+#sudo 
+
 sudo cp /vagrant/assets/brand.conf.php /usr/share/zabbix/local/conf/brand.conf.php
 sudo cp /vagrant/assets/company-main-logo.png /usr/share/zabbix/company-main-logo.png
 sudo cp /vagrant/assets/company-main-logo-sidebar.png /usr/share/zabbix/company-main-logo-sidebar.png
