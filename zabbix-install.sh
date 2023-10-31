@@ -3,7 +3,6 @@
 USERPASSWORD=${1:-USERPASSWORD}
 ADMINPASSWORD=${1:-ADMINPASSWORD}
 ZABBIX_ADMIN_PASS=${1:-ZABBIX_ADMIN_PASS}
-
 PGPASSWORD=${1:-PGPASSWORD}
 
 echo "######################################################################"
@@ -222,5 +221,9 @@ if test -f "/tmp/zabbix.sql"; then
   sudo -u postgres createdb -O zabbix -E Unicode -T template0 zabbix
   sudo su - postgres -c 'psql -d zabbix < /tmp/zabbix.sql'
 fi
+
+sudo growpart /dev/sda 3
+sudo lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu-lv
+sudo resize2fs /dev/ubuntu-vg/ubuntu-lv
 
 sudo shutdown -r now
