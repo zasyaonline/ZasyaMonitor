@@ -12,7 +12,7 @@ $ vagrant plugin install vagrant-vbguest vagrant-scp vagrant-disksize
 ```
 $ vagrant destroy 
 ```
-2. Shut down the current VM
+2. Shut down the current VM:
 
 ```
 $ vagrant halt
@@ -27,7 +27,7 @@ $ vagrant up
 5. Use VBoxManage to export the VM disk to a raw formatted disk file:
 
 ```
-$ VBoxManage clonehd --format RAW VMs/ZasyaMonitor_zasya_1697694371566_46745/ubuntu-jammy-22.04-cloudimg.vdi Zasya-Monitor-Customer-release.img
+$ VBoxManage clonehd --format RAW ~/VirtualBox\ VMs/ZasyaMonitor_zasya_1697694371566_46745/ubuntu-jammy-22.04-cloudimg.vdi Zasya-Monitor-Customer-release.img
 ```
 
 5. Use `dd` to write the raw disk image file to an external disk (your `if` and `of` will differ):
