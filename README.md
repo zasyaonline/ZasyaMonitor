@@ -1,9 +1,14 @@
 # Setup
 
+To build a new instance, you will need:
 ```
 $ sudo apt-get install virtualbox vagrant virtualbox-guest-x11 virtualbox-guest-utils
 $ vagrant plugin install vagrant-vbguest vagrant-scp vagrant-disksize
 ```
+
+Once deployed, find the Zabbix agent at one of the following locations:
+-
+- 
 
 # Building a New Instance
 
