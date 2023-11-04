@@ -63,4 +63,7 @@ $ vagrant destroy
 $ vagrant destroy 
 ```
 
-
+6. Changing the passwords:
+```
+$ vagrant destroy 
+```
