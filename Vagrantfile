@@ -10,7 +10,7 @@ Vagrant.configure("2") do |config|
     #config.vm.network "private_network", ip: "192.168.56.56"
 
     config.vm.synced_folder ".", "/vagrant"
-    config.disksize.size = '16GB'
+    config.disksize.size = '10GB'
     config.vm.provider "virtualbox" do |vb|
       # Display the VirtualBox GUI when booting the machine
       vb.gui = true

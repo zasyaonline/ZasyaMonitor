@@ -5,7 +5,7 @@ $ sudo apt-get install virtualbox vagrant virtualbox-guest-x11 virtualbox-guest-
 $ vagrant plugin install vagrant-vbguest vagrant-scp vagrant-disksize
 ```
 
-# How To
+# Building a New Instance
 
 1. Destroy the current VM:
 
@@ -35,3 +35,32 @@ $ VBoxManage clonehd --format RAW ~/VirtualBox\ VMs/ZasyaMonitor_zasya_169769437
 ```
 $ dd if=~/Zasya-Monitor-Customer-release.img of=/dev/sdb
 ```
+
+# Customizing an Instance
+
+1. Changing the application name from Zasya to something else:
+```
+$ vagrant destroy 
+```
+
+2. Changing the logos:
+```
+$ vagrant destroy 
+```
+
+3. Saving changes to the desktop:
+```
+$ vagrant destroy 
+```
+
+4. Saving changes to Zabbix:
+```
+$ vagrant destroy 
+```
+
+5. Changing disk/filesystem size:
+```
+$ vagrant destroy 
+```
+
+
