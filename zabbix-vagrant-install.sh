@@ -158,6 +158,7 @@ sudo cp /vagrant/assets/favicon.ico /usr/share/zabbix/favicon.ico
 sudo rm -rf /home/ubuntu
 sudo cp /vagrant/ubuntu.zip /home/
 cd /home/; sudo unzip ubuntu.zip
+sudo cp -a /vagrant/host_templates /home/ubuntu/
 sudo chown -R ubuntu:ubuntu /home/ubuntu/
 sudo rm /home/ubuntu.zip
 
