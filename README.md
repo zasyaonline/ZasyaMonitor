@@ -6,9 +6,12 @@ $ sudo apt-get install virtualbox vagrant virtualbox-guest-x11 virtualbox-guest-
 $ vagrant plugin install vagrant-vbguest vagrant-scp vagrant-disksize
 ```
 
-Once deployed, find the Zabbix agent at one of the following locations:
--
-- 
+# Once deployed, find the Zabbix agent at one of the following locations:
+
+- http://localhost/agents/zabbix_agent-6.0.3-linux-4.12-ppc64le-static.tar.gz
+- http://localhost/agents/zabbix_agent-6.4.8-windows-amd64-openssl.zip
+
+These are also available via the IP address over the network.
 
 # Building a New Instance
 
