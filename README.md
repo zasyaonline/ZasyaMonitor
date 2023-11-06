@@ -17,8 +17,9 @@ These are also available via the IP address over the network.
 
 Download https://github.com/zasyaonline/ZasyaMonitor/archive/refs/heads/main.zip ...
 
-Then, copy it to /root/ on the host and make sure there is already an 'ubuntu' account. 
-
+Then, copy it to /root/ on the host 
+make sure there is already an 'ubuntu' account. 
+else create a regular user "ubuntu"
 Then:
 ```
 # cd ZasyaMonitor
