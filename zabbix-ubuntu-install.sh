@@ -202,6 +202,8 @@ sudo VBoxClient --seamless
 # Finish rebranding Zabbix to Zasya
 sudo find /usr/share/zabbix/ -type f -not -path './conf/*' -exec sed -i 's/zabbix/zasya/g' {} \;
 sudo find /usr/share/zabbix/ -type f -not -path './conf/*' -exec sed -i 's/Zabbix/Zasya/g' {} \;
+sudo find /home/ubuntu/host_templates/ -type f -exec sed -i 's/zabbix/zasya/g' {} \;
+sudo find /home/ubuntu/host_templates/ -type f -exec sed -i 's/Zabbix/Zasya/g' {} \;
 sudo mv /usr/share/zabbix/include/classes/server/CZabbixServer.php /usr/share/zabbix/include/classes/server/CZasyaServer.php
 sudo mv /usr/share/zabbix/include/classes/api/item_types/CItemTypeZabbix.php /usr/share/zabbix/include/classes/api/item_types/CItemTypeZasya.php
 sudo mv /usr/share/zabbix/include/classes/api/item_types/CItemTypeZabbixActive.php /usr/share/zabbix/include/classes/api/item_types/CItemTypeZasyaActive.php
