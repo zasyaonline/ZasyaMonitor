@@ -59,7 +59,7 @@ $ sudo dd if=$HOME/Zasya-Monitor-Customer-release.img of=/dev/sdc status=progres
 
 # Customizing an Instance
 
-1. Changing the application name from Zasya to something else, open zabbix-vagrant-install.sh and/or zabbix-ubuntu-install.sh and replace 'Zasya' and 'zasya' with something else:
+1. Changing the application name from Zasya to something else, open zabbix-vagrant-install.sh and/or zabbix-ubuntu-install.sh and replace 'Zasya' and 'zasya' with something else (*including the file names!*):
 ```
 # Finish rebranding Zabbix to Zasya
 sudo find /usr/share/zabbix/ -type f -not -path './conf/*' -exec sed -i 's/zabbix/zasya/g' {
