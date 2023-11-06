@@ -1,6 +1,6 @@
 # Setup
 
-To build a new instance, you will need:
+To build a new instance with Vagrant, you will need:
 ```
 $ sudo apt-get install virtualbox vagrant virtualbox-guest-x11 virtualbox-guest-utils
 $ vagrant plugin install vagrant-vbguest vagrant-scp vagrant-disksize
@@ -12,6 +12,18 @@ Once deployed, find the Zabbix agent at one of the following locations:
 - http://localhost/agents/zabbix_agent-6.4.8-windows-amd64-openssl.zip
 
 These are also available via the IP address over the network.
+
+# Installing on Bare Ubuntu
+
+Download https://github.com/zasyaonline/ZasyaMonitor/archive/refs/heads/main.zip ...
+
+Then, copy it to /root/ on the host and make sure there is already an 'ubuntu' account. 
+
+Then:
+```
+# cd ZasyaMonitor
+# ./zabbix-ubuntu-install.sh
+```
 
 # Building a New Instance
 
