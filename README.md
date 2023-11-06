@@ -30,7 +30,6 @@ $ vagrant halt
 
 ```
 $ vagrant up
-
 ```
 5. Use VBoxManage to export the VM disk to a raw formatted disk file:
 
