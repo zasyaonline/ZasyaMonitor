@@ -85,7 +85,9 @@ $ ls assets
 brand.conf.php                         company-main-logo-sidebar.png  zasya-logo.jpg
 company-main-logo.png                  desktop-background.jpeg
 company-main-logo-sidebar-compact.png  favicon.ico
- 
+
+** How to create to a favicon
+https://www.lcn.com/blog/beginners-guide-favicons/
 ```
 
 3. Saving changes to the desktop:
