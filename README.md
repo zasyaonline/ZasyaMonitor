@@ -26,7 +26,7 @@ Then:
 # ./zabbix-ubuntu-install.sh
 ```
 
-# Building a New Customed Instance
+# Building a New Custom Instance
 
 
 1. Changing disk/filesystem size (Vagrant only): edit the Vagrantfile and adjust the size:
