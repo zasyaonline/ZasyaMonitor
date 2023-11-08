@@ -44,27 +44,13 @@ PGPASSWORD=${1:-CUSTOM_PGPASSWORD}
 ```
 Simply replace 'CUSTOMPASSWORD' or similar with the password that you want to be set upon provision.
 
-3. Start from scratch by deleting any existing VM with `vagrant destroy -f`.
+3. Start from scratch by deleting any existing VM with `vagrant destroy -f`. Also, you can/should remove zabbix.sql to start a new database from scratch since the database contains branded titles and group names.
 
 4. Changing the application name from Zasya to something else, open zabbix-vagrant-install.sh and/or zabbix-ubuntu-install.sh and replace 'Zasya' and 'zasya' with something else (*including the file names!*):
 ```
-# Finish rebranding Zabbix to Zasya
-sudo find /usr/share/zabbix/ -type f -not -path './conf/*' -exec sed -i 's/zabbix/zasya/g' {
-} \;
-sudo find /usr/share/zabbix/ -type f -not -path './conf/*' -exec sed -i 's/Zabbix/Zasya/g' {
-} \;
-sudo mv /usr/share/zabbix/include/classes/server/CZabbixServer.php /usr/share/zabbix/include/classes/server/CZasyaServer.php
-sudo mv /usr/share/zabbix/include/classes/api/item_types/CItemTypeZabbix.php /usr/share/zabbix/include/classes/api/item_types/CItemTypeZasya.php
-sudo mv /usr/share/zabbix/include/classes/api/item_types/CItemTypeZabbixActive.php /usr/share/zabbix/include/classes/api/item_types/CItemTypeZasyaActive.php
-sudo mv /usr/share/zabbix/zabbix.php /usr/share/zabbix/zasya.php
-sudo mv /usr/share/zabbix/conf/zabbix.conf.php /usr/share/zabbix/conf/zasya.conf.php 
+BRANDNAME_UPPER=${1:-Zasya}
+BRANDNAME_LOWER=${1:-zasya}
 ```
-Then, edit the following line to change the site name from 'Zasya Monitor' to something else:
-
-```
-\$ZBX_SERVER_NAME = "Zasya Monitor";
-```
-
 5. To change the logos, replace these files:
 ```
 $ ls assets

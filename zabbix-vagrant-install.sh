@@ -1,5 +1,7 @@
 #!/bin/bash
 
+BRANDNAME_UPPER=${1:-Zasya}
+BRANDNAME_LOWER=${1:-zasya}
 USERPASSWORD=${1:-USERPASSWORD}
 ADMINPASSWORD=${1:-ADMINPASSWORD}
 ZABBIX_ADMIN_PASS=${1:-ZABBIX_ADMIN_PASS}
@@ -73,7 +75,7 @@ sudo tee /etc/zabbix/web/zabbix.conf.php <<EOL
     \$DB["DOUBLE_IEEE754"] = true;
     \$ZBX_SERVER = "localhost";
     \$ZBX_SERVER_PORT = "10051";
-    \$ZBX_SERVER_NAME = "Zasya Monitor";
+    \$ZBX_SERVER_NAME = "${BRANDNAME_UPPER}";
     \$IMAGE_FORMAT_DEFAULT = IMAGE_FORMAT_PNG;
 EOL
 
@@ -141,11 +143,6 @@ sudo cp /vagrant/assets/company-main-logo-sidebar-compact.png /usr/share/zabbix/
 sudo rm -rf /var/cache/apt/archives/*.deb
 sudo DEBIAN_FRONTEND=noninteractive apt-get -q -y -f install virtualbox-guest-utils virtualbox-guest-x11 virtualbox-guest-x11 apache2-utils 
 
-sudo usermod -c "Zasya Admin" vagrant
-echo "vagrant:${ADMINPASSWORD}" | sudo chpasswd
-sudo useradd -m -c "Zasya" -s /bin/bash ubuntu
-echo "ubuntu:${USERPASSWORD}" | sudo chpasswd
-
 sudo apt-get clean
 sudo DEBIAN_FRONTEND=noninteractive apt-get -q -y -f install xubuntu-core 
 sudo DEBIAN_FRONTEND=noninteractive apt-get -q -y -f remove --purge gdm3
@@ -154,13 +151,6 @@ sudo apt-get clean
 
 sudo cp /vagrant/assets/desktop-background.jpeg /usr/share/xfce4/backdrops/xubuntu-wallpaper.png
 sudo cp /vagrant/assets/favicon.ico /usr/share/zabbix/favicon.ico
-
-sudo rm -rf /home/ubuntu
-sudo cp /vagrant/ubuntu.zip /home/
-cd /home/; sudo unzip ubuntu.zip
-sudo cp -a /vagrant/host_templates /home/ubuntu/
-sudo chown -R ubuntu:ubuntu /home/ubuntu/
-sudo rm /home/ubuntu.zip
 
 sed -i "s/allowed_users=.*$/allowed_users=anybody/" /etc/X11/Xwrapper.config
 sudo cp /vagrant/apps/zasya-monitor-config.sh /usr/local/bin/
@@ -186,9 +176,6 @@ Pin-Priority: -1
 
 sudo apt install -q -y firefox
 
-ZABBIX_ADMIN_PASSHASH=`htpasswd -bnBC 10 "" ${ZABBIX_ADMIN_PASS} | tr -d ":\n"`
-psql postgresql://zabbix:${PGPASSWORD}@localhost --command="update users set passwd = '${ZABBIX_ADMIN_PASSHASH}' where username = 'Admin';" 
-psql postgresql://zabbix:${PGPASSWORD}@localhost --command="update hosts set name = 'Zasya server' where hostid = '10084';"
 sudo pip install git+https://github.com/unioslo/zabbix-cli.git@master
 # Hack to fix Zabbix 6.4 support for zabbix-cli
 # https://github.com/unioslo/zabbix-cli/issues/160
@@ -200,22 +187,34 @@ sudo VBoxClient --display
 sudo VBoxClient --checkhostversion
 sudo VBoxClient --seamless
 
-# Finish rebranding Zabbix to Zasya
-sudo find /usr/share/zabbix/ -type f -not -path './conf/*' -exec sed -i 's/zabbix/zasya/g' {} \;
-sudo find /usr/share/zabbix/ -type f -not -path './conf/*' -exec sed -i 's/Zabbix/Zasya/g' {} \;
-sudo find /home/ubuntu/host_templates/ -type f -exec sed -i 's/zabbix/zasya/g' {} \;
-sudo find /home/ubuntu/host_templates/ -type f -exec sed -i 's/Zabbix/Zasya/g' {} \;
-sudo mv /usr/share/zabbix/include/classes/server/CZabbixServer.php /usr/share/zabbix/include/classes/server/CZasyaServer.php
-sudo mv /usr/share/zabbix/include/classes/api/item_types/CItemTypeZabbix.php /usr/share/zabbix/include/classes/api/item_types/CItemTypeZasya.php
-sudo mv /usr/share/zabbix/include/classes/api/item_types/CItemTypeZabbixActive.php /usr/share/zabbix/include/classes/api/item_types/CItemTypeZasyaActive.php
-sudo mv /usr/share/zabbix/zabbix.php /usr/share/zabbix/zasya.php
-sudo mv /usr/share/zabbix/conf/zabbix.conf.php /usr/share/zabbix/conf/zasya.conf.php
+# Finish rebranding Zabbix to $BRANDNAME
+sudo find /usr/share/zabbix/ -type f -not -path './conf/*' -exec sed -i 's/zabbix/${BRANDNAME_LOWER}/g' {} \;
+sudo find /usr/share/zabbix/ -type f -not -path './conf/*' -exec sed -i 's/Zabbix/${BRANDNAME_UPPER}/g' {} \;
+sudo find /home/ubuntu/host_templates/ -type f -exec sed -i 's/zabbix/${BRANDNAME_LOWER}/g' {} \;
+sudo find /home/ubuntu/host_templates/ -type f -exec sed -i 's/Zabbix/${BRANDNAME_UPPER}/g' {} \;
+sudo mv /usr/share/zabbix/include/classes/server/CZabbixServer.php /usr/share/zabbix/include/classes/server/C${BRANDNAME_UPPER}Server.php
+sudo mv /usr/share/zabbix/include/classes/api/item_types/CItemTypeZabbix.php /usr/share/zabbix/include/classes/api/item_types/CItemType${BRANDNAME_UPPER}.php
+sudo mv /usr/share/zabbix/include/classes/api/item_types/CItemTypeZabbixActive.php /usr/share/zabbix/include/classes/api/item_types/CItemType${BRANDNAME_UPPER}Active.php
+sudo mv /usr/share/zabbix/zabbix.php /usr/share/zabbix/${BRANDNAME_LOWER}.php
+sudo mv /usr/share/zabbix/conf/zabbix.conf.php /usr/share/zabbix/conf/${BRANDNAME_LOWER}.conf.php
 
 # Clear up >500MB by uninstalling old kernel that came with the OS:
 sudo purge-old-kernels --keep 1
 
+sudo usermod -c "Zasya Admin" vagrant
+echo "vagrant:${ADMINPASSWORD}" | sudo chpasswd
+# Ubuntu user already exists in ubuntu/jammy64 VM
+sudo usermod -c "Zasya" -s /bin/bash ubuntu
+echo "ubuntu:${USERPASSWORD}" | sudo chpasswd
+
+sudo rm -rf /home/ubuntu
+sudo cp /vagrant/ubuntu.zip /home/
+cd /home/; sudo unzip ubuntu.zip
+sudo cp -a /vagrant/host_templates /home/ubuntu/
+sudo chown -R ubuntu:ubuntu /home/ubuntu/
+sudo rm /home/ubuntu.zip
+
 # If a zabbix.sql exists in this folder let's drop the old zabbix database and import it.
-sudo cp /vagrant/zabbix.sql /tmp/
 sudo cp /vagrant/zabbix.sql /tmp/
 if test -f "/tmp/zabbix.sql"; then
   sudo systemctl stop zabbix-server.service
@@ -224,8 +223,11 @@ if test -f "/tmp/zabbix.sql"; then
   sudo su - postgres -c 'psql -d zabbix < /tmp/zabbix.sql'
 fi
 
-sudo growpart /dev/sda 3
-#sudo lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu-lv
-sudo resize2fs /dev/ubuntu-vg/ubuntu-lv
+ZABBIX_ADMIN_PASSHASH=`htpasswd -bnBC 10 "" ${ZABBIX_ADMIN_PASS} | tr -d ":\n"`
+psql postgresql://zabbix:${PGPASSWORD}@localhost --command="update users set passwd = '${ZABBIX_ADMIN_PASSHASH}' where username = 'Admin';" 
+psql postgresql://zabbix:${PGPASSWORD}@localhost --command="update hosts set name = '${BRANDNAME_UPPER} server' where hostid = '10084';"
+
+sudo growpart /dev/sda 1
+sudo resize2fs /dev/sda1
 
 sudo shutdown -r now
