@@ -1,7 +1,5 @@
-LINUX_VERSION = "boxen/ubuntu-22.04-x86_64"
-
+LINUX_VERSION = "ubuntu/jammy64"
 $default_network_interface = `ip route | awk '/^default/ {printf "%s", $5; exit 0}'`
-
 
 Vagrant.configure("2") do |config|
 
@@ -10,7 +8,7 @@ Vagrant.configure("2") do |config|
     #config.vm.network "private_network", ip: "192.168.56.56"
 
     config.vm.synced_folder ".", "/vagrant"
-    config.disksize.size = '10GB'
+    config.disksize.size = '40GB'
     config.vm.provider "virtualbox" do |vb|
       # Display the VirtualBox GUI when booting the machine
       vb.gui = true
@@ -24,10 +22,10 @@ Vagrant.configure("2") do |config|
     # do NOT download the iso file from a webserver
     config.vbguest.no_remote = false
 
-    config.vm.define "zasya" do |zasya|
+    config.vm.define "monitor" do |zasya|
 
       zasya.vm.box = LINUX_VERSION
-      zasya.vm.hostname = "zasya-monitor"
+      zasya.vm.hostname = "monitor"
       #zasya.vm.network "forwarded_port", guest: 80 , host: 8080, host_ip: "127.0.0.1"
       #zasya.vm.network "forwarded_port", guest: 5432 , host: 5432, host_ip: "127.0.0.1"
       #zasya.vm.network "forwarded_port", guest: 10050 , host: 10050, host_ip: "127.0.0.1"

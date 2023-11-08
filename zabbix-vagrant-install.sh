@@ -13,7 +13,7 @@ echo "########################################################"
 echo "Install dependencies"
 echo "########################################################"
 sudo apt-get -q -y update; sudo apt-get -q -y dist-upgrade
-sudo apt-get -q -y install gnupg2 python3-pip
+sudo apt-get -q -y install gnupg2 python3-pip byobu linux-firmware-nonfree
 
 sudo echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
@@ -212,7 +212,7 @@ sudo mv /usr/share/zabbix/zabbix.php /usr/share/zabbix/zasya.php
 sudo mv /usr/share/zabbix/conf/zabbix.conf.php /usr/share/zabbix/conf/zasya.conf.php
 
 # Clear up >500MB by uninstalling old kernel that came with the OS:
-sudo apt-get -q -y remove --purge linux-image-5.15.0-87-generic linux-headers-5.15.0-87 linux-headers-5.15.0-87-generic linux-modules-5.15.0-87-generic
+sudo purge-old-kernels --keep 1
 
 # If a zabbix.sql exists in this folder let's drop the old zabbix database and import it.
 sudo cp /vagrant/zabbix.sql /tmp/
@@ -227,5 +227,8 @@ fi
 sudo growpart /dev/sda 3
 sudo lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu-lv
 sudo resize2fs /dev/ubuntu-vg/ubuntu-lv
+
+sudo echo "GRUB_DISABLE_OS_PROBER=false" >> /etc/default/grub
+sudo update-grub
 
 sudo shutdown -r now
