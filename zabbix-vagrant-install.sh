@@ -75,7 +75,7 @@ sudo tee /etc/zabbix/web/zabbix.conf.php <<EOL
     \$DB["DOUBLE_IEEE754"] = true;
     \$ZBX_SERVER = "localhost";
     \$ZBX_SERVER_PORT = "10051";
-    \$ZBX_SERVER_NAME = "${BRANDNAME_UPPER}";
+    \$ZBX_SERVER_NAME = "Monitor";
     \$IMAGE_FORMAT_DEFAULT = IMAGE_FORMAT_PNG;
 EOL
 
@@ -186,10 +186,10 @@ sudo VBoxClient --checkhostversion
 sudo VBoxClient --seamless
 
 # Finish rebranding Zabbix to $BRANDNAME
-sudo find /usr/share/zabbix/ -type f -not -path './conf/*' -exec sed -i 's/zabbix/${BRANDNAME_LOWER}/g' {} \;
-sudo find /usr/share/zabbix/ -type f -not -path './conf/*' -exec sed -i 's/Zabbix/${BRANDNAME_UPPER}/g' {} \;
-sudo find /home/ubuntu/host_templates/ -type f -exec sed -i 's/zabbix/${BRANDNAME_LOWER}/g' {} \;
-sudo find /home/ubuntu/host_templates/ -type f -exec sed -i 's/Zabbix/${BRANDNAME_UPPER}/g' {} \;
+sudo find /usr/share/zabbix/ -type f -not -path './conf/*' -exec sed -i "s/zabbix/${BRANDNAME_LOWER}/g" {} \;
+sudo find /usr/share/zabbix/ -type f -not -path './conf/*' -exec sed -i "s/Zabbix/${BRANDNAME_UPPER}/g" {} \;
+sudo find /home/ubuntu/host_templates/ -type f -exec sed -i "s/zabbix/${BRANDNAME_LOWER}/g" {} \;
+sudo find /home/ubuntu/host_templates/ -type f -exec sed -i "s/Zabbix/${BRANDNAME_UPPER}/g" {} \;
 sudo mv /usr/share/zabbix/include/classes/server/CZabbixServer.php /usr/share/zabbix/include/classes/server/C${BRANDNAME_UPPER}Server.php
 sudo mv /usr/share/zabbix/include/classes/api/item_types/CItemTypeZabbix.php /usr/share/zabbix/include/classes/api/item_types/CItemType${BRANDNAME_UPPER}.php
 sudo mv /usr/share/zabbix/include/classes/api/item_types/CItemTypeZabbixActive.php /usr/share/zabbix/include/classes/api/item_types/CItemType${BRANDNAME_UPPER}Active.php
@@ -199,10 +199,10 @@ sudo mv /usr/share/zabbix/conf/zabbix.conf.php /usr/share/zabbix/conf/${BRANDNAM
 # Clear up >500MB by uninstalling old kernel that came with the OS:
 sudo purge-old-kernels --keep 1
 
-sudo usermod -c "Zasya Admin" vagrant
+sudo usermod -c "${BRANDNAME_UPPER} Admin" vagrant
 echo "vagrant:${ADMINPASSWORD}" | sudo chpasswd
 # Ubuntu user already exists in ubuntu/jammy64 VM
-sudo usermod -c "Zasya" -s /bin/bash ubuntu
+sudo usermod -c "${BRANDNAME_UPPER}" -s /bin/bash ubuntu
 echo "ubuntu:${USERPASSWORD}" | sudo chpasswd
 
 sudo rm -rf /home/ubuntu
