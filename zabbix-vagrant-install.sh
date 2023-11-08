@@ -225,10 +225,7 @@ if test -f "/tmp/zabbix.sql"; then
 fi
 
 sudo growpart /dev/sda 3
-sudo lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu-lv
+#sudo lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu-lv
 sudo resize2fs /dev/ubuntu-vg/ubuntu-lv
-
-sudo echo "GRUB_DISABLE_OS_PROBER=false" >> /etc/default/grub
-sudo update-grub
 
 sudo shutdown -r now
