@@ -153,8 +153,6 @@ sudo cp /vagrant/assets/desktop-background.jpeg /usr/share/xfce4/backdrops/xubun
 sudo cp /vagrant/assets/favicon.ico /usr/share/zabbix/favicon.ico
 
 sed -i "s/allowed_users=.*$/allowed_users=anybody/" /etc/X11/Xwrapper.config
-sudo cp /vagrant/apps/zasya-monitor-config.sh /usr/local/bin/
-sudo chmod 755 /usr/local/bin/zasya-monitor-config.sh
 
 sudo apt-get remove --purge -q -y libreoffice-base-core cheese-common gdm3 cheese thunderbird software-properties-gtk libreoffice-draw gimp hexchat gigolo libreoffice-impress libreoffice-common transmission-gtk rhythmbox xfburn parole gnome-mines gnome-sudoku snapd
 sudo apt-get autoremove --purge -q -y
