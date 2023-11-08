@@ -46,7 +46,7 @@ Simply replace 'CUSTOMPASSWORD' or similar with the password that you want to be
 
 3. Start from scratch by deleting any existing VM with `vagrant destroy -f`. Also, you can/should remove zabbix.sql to start a new database from scratch since the database contains branded titles and group names.
 
-4. Changing the application name from Zasya to something else, open zabbix-vagrant-install.sh and/or zabbix-ubuntu-install.sh and replace 'Zasya' and 'zasya' with something else (*including the file names!*):
+4. Changing the application name, open zabbix-vagrant-install.sh and replace 'Zasya' and 'zasya' with something else on these two lines:
 ```
 BRANDNAME_UPPER=${1:-Zasya}
 BRANDNAME_LOWER=${1:-zasya}
