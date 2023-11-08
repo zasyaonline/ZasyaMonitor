@@ -185,6 +185,13 @@ sudo VBoxClient --display
 sudo VBoxClient --checkhostversion
 sudo VBoxClient --seamless
 
+sudo rm -rf /home/ubuntu
+sudo cp /vagrant/ubuntu.zip /home/
+cd /home/; sudo unzip ubuntu.zip
+sudo cp -a /vagrant/host_templates /home/ubuntu/
+sudo chown -R ubuntu:ubuntu /home/ubuntu/
+sudo rm /home/ubuntu.zip
+
 # Finish rebranding Zabbix to $BRANDNAME
 sudo find /usr/share/zabbix/ -type f -not -path './conf/*' -exec sed -i "s/zabbix/${BRANDNAME_LOWER}/g" {} \;
 sudo find /usr/share/zabbix/ -type f -not -path './conf/*' -exec sed -i "s/Zabbix/${BRANDNAME_UPPER}/g" {} \;
@@ -204,13 +211,6 @@ echo "vagrant:${ADMINPASSWORD}" | sudo chpasswd
 # Ubuntu user already exists in ubuntu/jammy64 VM
 sudo usermod -c "${BRANDNAME_UPPER}" -s /bin/bash ubuntu
 echo "ubuntu:${USERPASSWORD}" | sudo chpasswd
-
-sudo rm -rf /home/ubuntu
-sudo cp /vagrant/ubuntu.zip /home/
-cd /home/; sudo unzip ubuntu.zip
-sudo cp -a /vagrant/host_templates /home/ubuntu/
-sudo chown -R ubuntu:ubuntu /home/ubuntu/
-sudo rm /home/ubuntu.zip
 
 # If a zabbix.sql exists in this folder let's drop the old zabbix database and import it.
 sudo cp /vagrant/zabbix.sql /tmp/
