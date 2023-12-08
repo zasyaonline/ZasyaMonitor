@@ -21,13 +21,13 @@ sudo echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg m
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 
 sudo apt-get -q update
-sudo apt-get -q -y install postgresql-15
+sudo apt-get -q -y install postgresql-14
 
-sudo systemctl enable --now postgresql@15-main
+sudo systemctl enable --now postgresql@14-main
 
-sudo sed -i "s/ident/md5/g" /etc/postgresql/15/main/pg_hba.conf
-sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /etc/postgresql/15/main/postgresql.conf
-sudo systemctl restart postgresql@15-main
+sudo sed -i "s/ident/md5/g" /etc/postgresql/14/main/pg_hba.conf
+sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /etc/postgresql/14/main/postgresql.conf
+sudo systemctl restart postgresql@14-main
 
 sudo -u postgres psql -c "CREATE USER zabbix WITH ENCRYPTED PASSWORD '${PGPASSWORD}'" 2>/dev/null
 sudo -u postgres createdb -O zabbix -E Unicode -T template0 zabbix 2>/dev/null
@@ -111,14 +111,14 @@ echo "deb https://packagecloud.io/timescale/timescaledb/ubuntu/ $(lsb_release -c
 wget --quiet -O - https://packagecloud.io/timescale/timescaledb/gpgkey | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/timescaledb.gpg
 
 sudo apt-get -q update
-sudo apt-get -q install -y timescaledb-2-postgresql-15=2.10.1~ubuntu22.04
+sudo apt-get -q install -y timescaledb-2-postgresql-14
 sudo apt-get clean
 
 sudo systemctl stop zabbix-server
 sudo systemctl stop postgresql
 
 sudo cp postgresql.conf /root/
-sudo mv /root/postgresql.conf /etc/postgresql/15/main/postgresql.conf
+sudo mv /root/postgresql.conf /etc/postgresql/14/main/postgresql.conf
 
 sudo systemctl start postgresql
 sudo -u postgres timescaledb-tune --quiet --yes
@@ -139,7 +139,6 @@ sudo cp assets/company-main-logo.png /usr/share/zabbix/company-main-logo.png
 sudo cp assets/company-main-logo-sidebar.png /usr/share/zabbix/company-main-logo-sidebar.png
 sudo cp assets/company-main-logo-sidebar-compact.png /usr/share/zabbix/company-main-logo-sidebar-compact.png
 
-sudo rm -rf /var/cache/apt/archives/*.deb
 sudo DEBIAN_FRONTEND=noninteractive apt-get -q -y -f install virtualbox-guest-utils virtualbox-guest-x11 virtualbox-guest-x11 apache2-utils 
 
 sudo apt-get clean
@@ -203,11 +202,12 @@ sudo usermod -c "${BRANDNAME_UPPER}" -s /bin/bash ubuntu
 echo "ubuntu:${USERPASSWORD}" | sudo chpasswd
 
 # If a zabbix.sql exists in this folder let's drop the old zabbix database and import it.
-if test -f "zabbix.sql"; then
+if test -f "${PWD}/zabbix.sql"; then
+  sudo cp ${PWD}/zabbix.sql /tmp/
   sudo systemctl stop zabbix-server.service
   sudo su - postgres -c 'dropdb zabbix'
   sudo -u postgres createdb -O zabbix -E Unicode -T template0 zabbix
-  sudo su - postgres -c 'psql -d zabbix < zabbix.sql'
+  sudo su - postgres -c 'psql -d zabbix < /tmp/zabbix.sql'
 fi
 
 ZABBIX_ADMIN_PASSHASH=`htpasswd -bnBC 10 "" ${ZABBIX_ADMIN_PASS} | tr -d ":\n"`
