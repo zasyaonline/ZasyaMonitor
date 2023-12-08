@@ -133,7 +133,6 @@ sleep 5
 sudo systemctl restart nginx
 
 sudo cp -a agents /usr/share/zabbix/
-#sudo 
 
 sudo cp assets/brand.conf.php /usr/share/zabbix/local/conf/brand.conf.php
 sudo cp assets/company-main-logo.png /usr/share/zabbix/company-main-logo.png
@@ -181,7 +180,7 @@ sudo sed -i "s/user=user/username=user/g" /usr/local/lib/python3.10/dist-package
 
 sudo rm -rf /home/ubuntu
 sudo cp ubuntu.zip /home/
-cd /home/; sudo unzip ubuntu.zip
+sudo unzip ubuntu.zip -d /home/ubuntu
 sudo cp -a host_templates /home/ubuntu/
 sudo chown -R ubuntu:ubuntu /home/ubuntu/
 sudo rm /home/ubuntu.zip
@@ -208,7 +207,7 @@ if test -f "zabbix.sql"; then
   sudo systemctl stop zabbix-server.service
   sudo su - postgres -c 'dropdb zabbix'
   sudo -u postgres createdb -O zabbix -E Unicode -T template0 zabbix
-  sudo su - postgres -c 'psql -d zabbix < /tmp/zabbix.sql'
+  sudo su - postgres -c 'psql -d zabbix < zabbix.sql'
 fi
 
 ZABBIX_ADMIN_PASSHASH=`htpasswd -bnBC 10 "" ${ZABBIX_ADMIN_PASS} | tr -d ":\n"`

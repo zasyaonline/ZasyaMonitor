@@ -31,7 +31,7 @@ Vagrant.configure("2") do |config|
       #zasya.vm.network "forwarded_port", guest: 10050 , host: 10050, host_ip: "127.0.0.1"
       #zasya.vm.network "forwarded_port", guest: 10051 , host: 10051, host_ip: "127.0.0.1"
 	  
-      zasya.vm.provision "shell", path: "zabbix-vagrant-install.sh"
+      #zasya.vm.provision "shell", path: "zabbix-vagrant-install.sh"
 
     end
   
