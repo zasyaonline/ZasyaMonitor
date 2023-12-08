@@ -180,7 +180,7 @@ sudo sed -i "s/user=user/username=user/g" /usr/local/lib/python3.10/dist-package
 
 sudo rm -rf /home/ubuntu
 sudo cp ubuntu.zip /home/
-sudo unzip ubuntu.zip -d /home/ubuntu
+sudo unzip ubuntu.zip -d /home/
 sudo cp -a host_templates /home/ubuntu/
 sudo chown -R ubuntu:ubuntu /home/ubuntu/
 sudo rm /home/ubuntu.zip
