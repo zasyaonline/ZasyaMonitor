@@ -111,7 +111,7 @@ echo "deb https://packagecloud.io/timescale/timescaledb/ubuntu/ $(lsb_release -c
 wget --quiet -O - https://packagecloud.io/timescale/timescaledb/gpgkey | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/timescaledb.gpg
 
 sudo apt-get -q update
-sudo apt-get -q install -y timescaledb-2-postgresql-15=2.10.1~ubuntu22.04
+sudo apt-get -q install -y timescaledb-2-postgresql-15
 sudo apt-get clean
 
 sudo systemctl stop zabbix-server

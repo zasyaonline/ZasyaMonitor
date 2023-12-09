@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
     config.disksize.size = '40GB'
     config.vm.provider "virtualbox" do |vb|
       # Display the VirtualBox GUI when booting the machine
-      vb.gui = true
+      vb.gui = false
       vb.memory = 4096
       vb.cpus = 3
     end
@@ -31,8 +31,6 @@ Vagrant.configure("2") do |config|
       #zasya.vm.network "forwarded_port", guest: 10050 , host: 10050, host_ip: "127.0.0.1"
       #zasya.vm.network "forwarded_port", guest: 10051 , host: 10051, host_ip: "127.0.0.1"
 	  
-      #zasya.vm.provision "shell", path: "zabbix-vagrant-install.sh"
-
     end
   
 end
