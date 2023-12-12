@@ -77,6 +77,8 @@ cat assets/brand.conf.php                INT ✘
            'BRAND_HELP_URL' => 'https://zasyaonline.com/help/'
        ];
 ```
+
+vagrant up
 vagrant ssh
 vagrant@monitor:~$ sudo -i
 root@monitor:~# cd /vagrant/
