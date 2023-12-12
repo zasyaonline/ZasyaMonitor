@@ -77,7 +77,10 @@ cat assets/brand.conf.php                INT ✘
            'BRAND_HELP_URL' => 'https://zasyaonline.com/help/'
        ];
 ```
-
+vagrant ssh
+vagrant@monitor:~$ sudo -i
+root@monitor:~# cd /vagrant/
+root@monitor:/vagrant# ./zabbix-ubuntu-install.sh
 6. Run vagrant up and wait for desktop and login.
 
 7. Make customizations to desktop configuration, and then once satisfied proceed to save the desktop and databases.
