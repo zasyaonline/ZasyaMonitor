@@ -4,12 +4,75 @@ import subprocess
 import requests
 
 # Replace with your Zabbix server information
-zabbix_url = 'http://192.168.1.2/api_jsonrpc.php'
+zabbix_url = 'http://your-zabbix-server-ip/api_jsonrpc.php'
 zabbix_user = 'Admin'
 zabbix_password = 'ZABBIX_ADMIN_PASS'
 
-zapi = ZabbixAPI("http://192.168.1.2")
+zapi = ZabbixAPI("http://your-zabbix-server-ip")
 zapi.login(zabbix_user, zabbix_password)
+
+def get_all_action_ids():
+    try:
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {auth_token}',
+        }
+
+        data = {
+            'jsonrpc': '2.0',
+            'method': 'action.get',
+            'params': {'output': ['actionid']},
+            'id': 1,
+        }
+
+        response = requests.post(zabbix_url, json=data, headers=headers)
+        response.raise_for_status()
+
+        actions = response.json()
+
+        if 'result' in actions:
+            # Extract action IDs
+            action_ids = [action["actionid"] for action in actions['result']]
+            return action_ids
+        else:
+            print(f"Failed to get action IDs. Response: {actions}")
+            return []
+
+    except requests.RequestException as e:
+        print(f"Error making API request: {e}")
+        return []
+    except json.JSONDecodeError as e:
+        print(f"Error decoding JSON response: {e}")
+        print(f"Response content: {response.text}")
+        return []
+
+def update_action_status(action_id, new_status):
+    try:
+        # Update action status using curl
+        curl_command = [
+            'curl',
+            '-X', 'POST',
+            '-H', 'Content-Type: application/json',
+            '-H', f'Authorization: Bearer {auth_token}',
+            '-d', f'{{"jsonrpc": "2.0", "method": "action.update", "params": {{"actionid": "{action_id}", "status": "{new_status}"}}, "id": 1}}',
+            zabbix_url
+        ]
+
+        subprocess.check_output(curl_command)
+        print(f"Updated status for action ID {action_id} to {new_status}")
+
+    except subprocess.CalledProcessError as e:
+        print(f"Error executing curl command: {e}")
+
+def update_all_action_statuses(new_status):
+    # Get all action IDs
+    action_ids = get_all_action_ids()
+
+    # Update status for each action
+    for action_id in action_ids:
+        update_action_status(action_id, new_status)
+
+    print(f"All actions have been updated to status {new_status}")
 
 def discovery_rule_exists(zapi, rule_name):
     # Function to check if a discovery rule with the given name already exists
@@ -156,6 +219,12 @@ try:
                         else:
                             print(f"Error: Insufficient elements in values for line '{line.strip()}'")
 
+            # Set the new status (1 for disable)
+            new_status = "1"
+
+            # Update status for all actions
+            update_all_action_statuses(new_status)
+            
             # Create the discovery rule
             response = subprocess.check_output(['curl', '-X', 'POST', '-H', 'Content-Type: application/json', '-d', json.dumps(json_code), zabbix_url])
             drule_result = json.loads(response.decode())
@@ -217,6 +286,7 @@ try:
 
         # Your adjusted code for creating a discovery action
         discovery_action_name = "cctv devices"
+        
         if not discovery_action_exists(zapi, discovery_action_name):
             json_action = {
                 "jsonrpc": "2.0",
@@ -262,7 +332,7 @@ try:
                 "id": 1,
                 "auth": auth_token
             }
-
+            
             # Create the discovery action
             response_action = subprocess.check_output(['curl', '-X', 'POST', '-H', 'Content-Type: application/json', '-d', json.dumps(json_action), zabbix_url])
             action_result = json.loads(response_action.decode())
