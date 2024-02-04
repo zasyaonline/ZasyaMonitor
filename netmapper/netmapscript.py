@@ -5,11 +5,15 @@ import os
 import base64
 import random
 
+# define range for randomising device locations in the network map.
 min_coordinate = 300 
 max_coordinate = 800
+
+# define your zabbix credentials with API access.
 zabbixuser = 'Admin'
 zabbixpassword = 'ZABBIX_ADMIN_PASS'
 
+# define common template for triggers which will apply to all devices, map will not work if it is set to multi templates.
 trigger1 = 'Generic SNMP: High ICMP ping response time'
 trigger2 = 'Generic SNMP: High ICMP ping loss'
 trigger3 = 'Generic SNMP: Unavailable by ICMP ping'
@@ -18,7 +22,8 @@ trigger2color = 'FF6F00'
 trigger3color = 'DD0000'
 custom_icon_path = 'icon/cctv_(64).png'
 
-zapi = ZabbixAPI("http://192.168.1.2")
+# add you zabbix server IP
+zapi = ZabbixAPI("http://your-zabbix-server-ip")
 zapi.login(zabbixuser, zabbixpassword)
 print('Enter the hostgroup for which you want to make a map, format, exact syntax needed')
 my_hostgroup = input('')
