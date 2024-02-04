@@ -220,6 +220,8 @@ echo "######################################################################"
 echo "                 RUNNING POST INSTALLATION SCRIPTS                    "
 echo "######################################################################"
 
+sudo apt install python3 python3-pip curl -y
+sudo pip install pyzabbix
 sudo cp -r netmapper/ /home/ubuntu/
 sudo chown -R ubuntu:ubuntu /home/ubuntu/netmapper/
 cd /home/ubuntu/netmapper/
