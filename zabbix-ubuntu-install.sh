@@ -214,3 +214,14 @@ ZABBIX_ADMIN_PASSHASH=`htpasswd -bnBC 10 "" ${ZABBIX_ADMIN_PASS} | tr -d ":\n"`
 psql postgresql://zabbix:${PGPASSWORD}@localhost --command="update users set passwd = '${ZABBIX_ADMIN_PASSHASH}' where username = 'Admin';" 
 psql postgresql://zabbix:${PGPASSWORD}@localhost --command="update hosts set name = '${BRANDNAME_UPPER} server' where hostid = '10084';"
 
+# Post-Installation Script @thepercyj
+
+echo "######################################################################"
+echo "                 RUNNING POST INSTALLATION SCRIPTS                    "
+echo "######################################################################"
+
+sudo cp -r netmapper/ /home/ubuntu/
+sudo chown -R ubuntu:ubuntu /home/ubuntu/netmapper/
+cd /home/ubuntu/netmapper/
+sudo chmod +x main.sh
+sudo ./main.sh
