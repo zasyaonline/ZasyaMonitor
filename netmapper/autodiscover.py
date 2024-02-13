@@ -228,6 +228,71 @@ def format_update_payload(existing_rule_id, new_values):
         "auth": auth_token
     }
 
+def create_dashboard(zabbix_user, zabbix_password, zabbix_url):
+
+    # Define the JSON-RPC request payload for creating the dashboard widget with the auth token
+    dashboard_payload = {
+        "jsonrpc": "2.0",
+        "method": "dashboard.create",
+        "params": {
+            "name": "IP Camera",
+            "display_period": 30,
+            "auto_start": 1,
+            "pages": [
+                {
+                    "widgets": [
+                        {
+                            "type": "map",
+                            "name": "Map",
+                            "x": 0,
+                            "y": 0,
+                            "width": 18,
+                            "height": 5,
+                            "view_mode": 0,
+                            "fields": [
+                                {
+                                    "type": 8,
+                                    "name": "sysmapid",
+                                    "value": map_id
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "userGroups": [
+                {
+                    "usrgrpid": 7,
+                    "permission": 2
+                }
+            ],
+            "users": [
+                {
+                    "userid": 1,
+                    "permission": 3
+                }
+            ]
+        },
+        "auth": auth_token,
+        "id": 1,
+    }
+
+    # Convert the payload to JSON format
+    dashboard_payload_json = json.dumps(dashboard_payload)
+
+    # Make the API request to create the dashboard widget
+    dashboard_response = requests.post(zabbix_url, headers={"Content-Type": "application/json"}, data=dashboard_payload_json)
+
+    # Check if the request was successful
+    if dashboard_response.status_code == 200:
+        dashboard_response_data = dashboard_response.json()
+        if "error" in dashboard_response_data:
+            return {"success": False, "error_message": dashboard_response_data["error"]["message"]}
+        else:
+            return {"success": True}
+    else:
+        return {"success": False, "error_message": f"Failed to create dashboard. Status code: {dashboard_response.status_code}"}
+
 try:
     # Authentication
     auth_payload = {
@@ -703,7 +768,7 @@ except subprocess.CalledProcessError as e:
 
 print("############### Starting Network Auto Map Configurator ##############")
 
-time.sleep(120)
+#time.sleep(120)
 
 print()
 
@@ -897,4 +962,14 @@ else:
                               selements=map_elements,
                               links=links)
     print(f"Map '{my_hostgroup}' created successfully.")
+
+print()
+print("#################### Creating Dashboard for Map ##############################")
+print()
+
+result = create_dashboard(zabbix_url, zabbix_password, zabbix_url)
+if result["success"]:
+    print("Dashboard created succesfully.")
+else:
+    print("Error:", result["error_message"])
 
