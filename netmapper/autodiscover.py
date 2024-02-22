@@ -803,7 +803,7 @@ except subprocess.CalledProcessError as e:
 
 print("############### Starting Network Auto Map Configurator ##############")
 
-#time.sleep(120)
+time.sleep(120)
 
 print()
 
