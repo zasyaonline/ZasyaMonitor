@@ -1,5 +1,6 @@
 from pyzabbix import ZabbixAPI, ZabbixAPIException
 from netmapfunc import *
+from netscan import *
 import json
 import subprocess
 import requests
@@ -8,6 +9,8 @@ import base64
 import random
 import time
 import getpass
+import ipaddress
+from multiprocessing import Pool, cpu_count
 
 def authenticate_user(api_address, zabbix_user, zabbix_password):
     # Replace with your Zabbix server information
@@ -61,6 +64,31 @@ trigger1color = 'FF6F00'
 trigger2color = 'FF6F00'
 trigger3color = 'DD0000'
 custom_icon_path = 'icon/cctv_(64).png'
+
+
+def ping_ip(ip):
+    result = subprocess.run(['ping', '-c', '1', '-W', '1', str(ip)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    if result.returncode == 0:
+        return str(ip)
+
+def scan_cidr(cidr, num_workers=None):
+    ip_list = []
+    network = ipaddress.ip_network(cidr)
+    if num_workers is None:
+        num_workers = cpu_count()  # Use number of CPU cores by default
+    with Pool(processes=num_workers) as p:
+        ip_list = p.map(ping_ip, network.hosts())
+    return [ip for ip in ip_list if ip is not None]
+
+def save_to_file(reachable_ips, filename):
+    with open(filename, 'w') as file:
+        file.write(','.join(reachable_ips))
+
+def read_from_file(reachable_ips):
+    with open(filename, 'r') as file:
+        ips = file.readlines()
+        return [ip.rstrip('\n') for ip in ips]
+
 
 def get_all_action_ids():
     try:
@@ -321,8 +349,15 @@ try:
         current_discovery_rule_name = 'cctv'
         
         if not discovery_rule_exists(zapi, current_discovery_rule_name):
-            print('Enter network range you want to discover, you can use commas to seperate IP address or IP ranges, for eg 192.168.0.1,192.168.1.8 or 192.168.1.0-254,192.168.2.0-254:')
-            current_iprange = input('')
+            cidr  = input("Enter the CIDR range to scan (e.g., 192.168.1.0/24): ")
+            reachable_ips = scan_cidr(cidr, 4)
+            filename = 'reachable_ips.txt'
+            save_to_file(reachable_ips, filename)
+            r_iprange = read_from_file(reachable_ips)
+            for ip in r_iprange:
+                current_iprange = ip
+
+
             print('Enter interval check for discovery to run, for eg 1m or 5s or 1h:')
             current_delay = input('')
             
