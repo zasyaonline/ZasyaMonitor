@@ -1,6 +1,5 @@
 from pyzabbix import ZabbixAPI, ZabbixAPIException
 from netmapfunc import *
-from netscan import *
 import json
 import subprocess
 import requests
@@ -11,6 +10,11 @@ import time
 import getpass
 import ipaddress
 from multiprocessing import Pool, cpu_count
+
+def get_sysmapid_from_file():
+    with open("map.txt", "r") as file:
+        sysmapid = file.read().strip()
+    return sysmapid
 
 def authenticate_user(api_address, zabbix_user, zabbix_password):
     # Replace with your Zabbix server information
@@ -66,25 +70,42 @@ trigger3color = 'DD0000'
 custom_icon_path = 'icon/cctv_(64).png'
 
 
-def ping_ip(ip):
-    result = subprocess.run(['ping', '-c', '1', '-W', '1', str(ip)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    if result.returncode == 0:
-        return str(ip)
+def ping_ip(ip, snmp_community, port):
+    # Perform SNMP walk for each community string
+    snmpwalk_command = ['snmpwalk', '-c', snmp_community, '-v', '2c', '-t', '2', str(ip), 'iso.3.6.1.2.1.1.1.0']
+    try:
+        result = subprocess.run(snmpwalk_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=2)
+        if result.returncode == 0:
+            return str(ip)
+    except subprocess.TimeoutExpired:
+        pass
+    return None
 
-def scan_cidr(cidr, num_workers=None):
+def scan_cidr(cidr, snmp_community, port):
     ip_list = []
     network = ipaddress.ip_network(cidr)
-    if num_workers is None:
-        num_workers = cpu_count()  # Use number of CPU cores by default
+    hosts_list = list(network.hosts())
+    num_workers = min(cpu_count(), len(hosts_list))  # Use number of CPU cores by default
     with Pool(processes=num_workers) as p:
-        ip_list = p.map(ping_ip, network.hosts())
+        ip_list = p.starmap(ping_ip, [(ip, snmp_community, port) for ip in hosts_list])
     return [ip for ip in ip_list if ip is not None]
 
-def save_to_file(reachable_ips, filename):
-    with open(filename, 'w') as file:
-        file.write(','.join(reachable_ips))
+def sort_ip_addresses(ip_addresses):
+    sorted_ips = sorted(ip_addresses, key=lambda ip: tuple(map(int, ip.split('.'))))
+    return sorted_ips
 
-def read_from_file(reachable_ips):
+def save_to_file(reachable_ips, filename):
+    sorted_ips = sort_ip_addresses(reachable_ips)
+
+    with open(filename, 'a') as file:
+        if sorted_ips:
+            concatenated_line = ','.join(sorted_ips)
+            file.write(concatenated_line)
+            if len(sorted_ips) > 1:
+                file.write(',')
+        
+
+def read_from_file(filename):
     with open(filename, 'r') as file:
         ips = file.readlines()
         return [ip.rstrip('\n') for ip in ips]
@@ -256,7 +277,7 @@ def format_update_payload(existing_rule_id, new_values):
         "auth": auth_token
     }
 
-def create_dashboard(zabbix_user, zabbix_password, zabbix_url):
+def create_dashboard(user, password, zabbix_url):
 
     # Define the JSON-RPC request payload for creating the dashboard widget with the auth token
     dashboard_payload = {
@@ -321,6 +342,7 @@ def create_dashboard(zabbix_user, zabbix_password, zabbix_url):
     else:
         return {"success": False, "error_message": f"Failed to create dashboard. Status code: {dashboard_response.status_code}"}
 
+
 try:
     # Authentication
     auth_payload = {
@@ -349,11 +371,48 @@ try:
         current_discovery_rule_name = 'cctv'
         
         if not discovery_rule_exists(zapi, current_discovery_rule_name):
+            # Prompting user for SNMP community and port
+            snmp_community = input("Enter SNMP community: ")
+            port = input("Enter port number: ")
+
+            
+            existing_lines = []
+            with open("configure-checks.txt", "r") as file:
+                existing_lines = file.readlines()
+
+            community_exists = False
+
+            for i, line in enumerate(existing_lines):
+                if snmp_community in line:
+                    existing_lines[i] = "{} {}\n".format(snmp_community, port)
+                    community_exists = True
+                    break
+
+            if not community_exists:
+                # Lines to be added to the configure-checks.txt file
+                lines_to_add = [
+                    "iso.3.6.1.2.1.1.1.0 {} {}\n".format(snmp_community, port),
+                ]
+                
+                existing_lines.extend(lines_to_add)
+
+                # Writing lines to configure-checks.txt file
+                with open("configure-checks.txt", "w") as file:
+                    for line in existing_lines:
+                        file.write(line)
+            else:
+                print("Community string already exists in configure-checks.txt")
+            
             cidr  = input("Enter the CIDR range to scan (e.g., 192.168.1.0/24): ")
-            reachable_ips = scan_cidr(cidr, 4)
-            filename = 'reachable_ips.txt'
-            save_to_file(reachable_ips, filename)
-            r_iprange = read_from_file(reachable_ips)
+            with open('configure-checks.txt', 'r') as f:
+                for line in f:
+                    if line.startswith('iso.3.6.1.2.1.1.1.0'):
+                        snmp_community, port = line.split()[1:3]
+                        reachable_ips = scan_cidr(cidr, snmp_community, port)
+                        filename = 'reachable_ips.txt'
+                        save_to_file(reachable_ips, filename)
+            r_iprange = read_from_file("reachable_ips.txt")
+            
             for ip in r_iprange:
                 current_iprange = ip
 
@@ -803,7 +862,7 @@ except subprocess.CalledProcessError as e:
 
 print("############### Starting Network Auto Map Configurator ##############")
 
-time.sleep(120)
+time.sleep(300)
 
 print()
 
@@ -996,13 +1055,24 @@ else:
                               height="1080",
                               selements=map_elements,
                               links=links)
+
+
     print(f"Map '{my_hostgroup}' created successfully.")
+
+    sysmapid = new_map['sysmapids'][0]
+
+    with open("map.txt", "w") as file:
+        file.write(str(sysmapid))
 
 print()
 print("#################### Creating Dashboard for Map ##############################")
 print()
 
-result = create_dashboard(zabbix_url, zabbix_password, zabbix_url)
+zabbix_url = f'http://{api_address}/api_jsonrpc.php'
+user = zabbix_user
+password = zabbix_password
+map_id = get_sysmapid_from_file()
+result = create_dashboard(user, password, zabbix_url)
 if result["success"]:
     print("Dashboard created succesfully.")
 else:
