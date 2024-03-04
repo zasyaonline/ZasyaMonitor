@@ -20,6 +20,13 @@ Download https://github.com/zasyaonline/ZasyaMonitor/archive/refs/heads/main.zip
 Then, copy it to /root/ on the host 
 make sure there is already an 'ubuntu' account. 
 else create a regular user "ubuntu"
+
+ssh root@your_server_ip_address
+adduser ubuntu
+usermod -aG sudo ubuntu - add user to sudo group
+su - ubuntu - test user
+sudo command_to_run - sample
+sudo ls -la /root
 Then:
 ```
 # cd ZasyaMonitor
