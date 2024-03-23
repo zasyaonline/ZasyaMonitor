@@ -100,10 +100,8 @@ def save_to_file(reachable_ips, filename):
     with open(filename, 'a') as file:
         if sorted_ips:
             concatenated_line = ','.join(sorted_ips)
-            file.write(concatenated_line)
-            if len(sorted_ips) > 1:
-                file.write(',')
-        
+            concatenated_line = concatenated_line.rstrip(',')  
+            file.write(concatenated_line)        
 
 def read_from_file(filename):
     with open(filename, 'r') as file:
