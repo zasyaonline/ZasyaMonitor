@@ -97,7 +97,7 @@ def sort_ip_addresses(ip_addresses):
 def save_to_file(reachable_ips, filename):
     sorted_ips = sort_ip_addresses(reachable_ips)
 
-    with open(filename, 'a') as file:
+    with open(filename, 'w') as file:
         if sorted_ips:
             concatenated_line = ','.join(sorted_ips)
             concatenated_line = concatenated_line.rstrip(',')  
